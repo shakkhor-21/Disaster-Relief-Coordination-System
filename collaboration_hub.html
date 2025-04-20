@@ -1,65 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Collaboration Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #fff1f2;
-      color: #1f2937;
+      background: #ecfeff;
+      color: #1e293b;
     }
+
     header {
-      background: #ef4444;
+      background: #0ea5e9;
       color: white;
       padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header h1 {
       font-family: 'Orbitron', sans-serif;
-      margin: 0;
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
-    #user-role {
-      font-family: 'Black Ops One', sans-serif;
-      font-size: 1.2rem;
-      background-color: white;
-      color: #ef4444;
-      padding: 0.4rem 1rem;
-      border-radius: 999px;
-      border: 2px solid #f87171;
-    }
-    .page-container {
+
+    main {
       padding: 2rem;
-      max-width: 1000px;
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
     }
+
+    section {
+      background: #e0f2fe;
+      border: 2px solid #7dd3fc;
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 900px;
+      width: 100%;
+    }
+
     h2 {
-      color: #b91c1c;
-      font-size: 1.6rem;
-      font-family: 'Orbitron', sans-serif;
-      margin-bottom: 1rem;
+      font-family: 'Black Ops One', sans-serif;
+      color: #0369a1;
+      text-align: center;
     }
-    p {
-      font-size: 1.05rem;
-      color: #374151;
-      line-height: 1.6;
+
+    .message-box {
+      background: #bae6fd;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Admin Portal</h1>
-    <div id="user-role">ADMIN</div>
-  </header>
-
-  <div class="page-container">
-    <h2>Collaboration Hub</h2>
-    <p>Enable seamless coordination between agencies, NGOs, and response teams. Share documents, updates, and strategies in one place.</p>
-  </div>
+  <header>Collaboration Hub</header>
+  <main>
+    <section>
+      <h2>Volunteer Discussions</h2>
+      <div class="message-box">
+        <strong>Ayesha:</strong> Supplies at Point B are running low, we need more tents.
+      </div>
+      <div class="message-box">
+        <strong>John:</strong> Transport available for Zone 4, need 2 volunteers to assist.
+      </div>
+    </section>
+  </main>
 </body>
 </html>

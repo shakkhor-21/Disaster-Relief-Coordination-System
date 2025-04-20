@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Evacuation Routes</title>
+  <title>Report Resource Needs</title>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -11,6 +11,9 @@
       font-family: 'Segoe UI', sans-serif;
       background: #ecfeff;
       color: #1e293b;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     header {
@@ -22,10 +25,11 @@
     }
 
     main {
-      padding: 2rem;
+      flex: 1;
       display: flex;
       justify-content: center;
-      margin-top: 1.5rem;
+      align-items: center;
+      padding: 2rem;
     }
 
     section {
@@ -33,8 +37,8 @@
       border: 2px solid #7dd3fc;
       border-radius: 20px;
       padding: 2rem;
-      max-width: 900px;
       width: 100%;
+      max-width: 600px;
     }
 
     h2 {
@@ -43,26 +47,38 @@
       text-align: center;
     }
 
-    ul {
+    form input,
+    form textarea,
+    form button {
+      display: block;
+      width: 100%;
       margin: 1rem 0;
-      padding-left: 1.2rem;
+      padding: 0.8rem;
+      border: 1px solid #bae6fd;
+      border-radius: 10px;
+      font-size: 1rem;
     }
 
-    li {
-      margin-bottom: 0.5rem;
+    form button {
+      background-color: #0ea5e9;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <header>Evacuation Routes</header>
+  <header>Report Resource Needs</header>
   <main>
     <section>
-      <h2>Designated Safe Routes</h2>
-      <ul>
-        <li>Main Street → Community Shelter A</li>
-        <li>Maple Avenue → High School Gym</li>
-        <li>East Zone → Sports Arena via River Road</li>
-      </ul>
+      <h2>Submit a Resource Request</h2>
+      <form>
+        <input type="text" placeholder="Resource Type (e.g., Water, Medicine)" required />
+        <input type="number" placeholder="Quantity Needed" required />
+        <textarea placeholder="Location Details" rows="4" required></textarea>
+        <button type="submit">Submit Request</button>
+      </form>
     </section>
   </main>
 </body>
