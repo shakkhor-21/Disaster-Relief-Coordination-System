@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #10b981, #e0fce9);
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #10b981;
+      color: white;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-family: 'Black Ops One', sans-serif;
+      font-size: 1.8rem;
+    }
+
+    #user-role {
+      background: white;
+      color: #10b981;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 1rem;
+      border: 2px solid #34d399;
+    }
+
+    .dashboard-container {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .welcome {
+      text-align: center;
+      font-size: 1.3rem;
+      font-style: italic;
+      color: #047857;
+      margin-bottom: 2rem;
+    }
+
+    .card-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+
+    .card {
+      background: white;
+      border: 2px solid #a7f3d0;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
+      transition: 0.3s ease;
+      cursor: pointer;
+      width: 240px;
+      text-align: center;
+    }
+
+    .card:hover {
+      background: #d1fae5;
+      transform: scale(1.05);
+    }
+
+    .card h3 {
+      margin: 0;
+      color: #065f46;
+      font-size: 1.1rem;
+    }
+
+    .card-grid a {
+  text-decoration: none;
+}
+
+.card-grid a.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #d1fae5, #f0fdf4); /* soft green */
+  border: 1px solid #6ee7b7;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  min-height: 140px;
+  flex: 1 1 250px;
+  max-width: 300px;
+}
+
+.card-grid a.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 30px rgba(5, 150, 105, 0.25);
+}
+
+.card-grid a.card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #065f46;
+  text-align: center;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>User Dashboard</h1>
+    <div id="user-role">USER</div>
+  </header>
+
+  <div class="dashboard-container">
+    <div class="welcome">“Help when needed, hope when it matters.”</div>
+    <div class="card-grid">
+      <a href="../user_dashboard/request_aid.html" class="card"><h3>Request Aid</h3></a>
+      <a href="../user_dashboard/track_aid_request.html" class="card"><h3>Track Aid Request</h3></a>
+      <a href="../user_dashboard/donate.html" class="card"><h3>Donate</h3></a>
+      <a href="../user_dashboard/lost_something.html" class="card"><h3>Lost Something?</h3></a>
+      <a href="../user_dashboard/found_something.html" class="card"><h3>Found Something?</h3></a>
+      <a href="../user_dashboard/view_alerts.html" class="card"><h3>View Alerts</h3></a>
+      <a href="../user_dashboard/evacuation_info.html" class="card"><h3>Evacuation Info</h3></a>
+    </div>    
+  </div>
+</body>
+</html>

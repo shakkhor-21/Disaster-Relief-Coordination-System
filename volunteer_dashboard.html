@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Volunteer Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #ecfeff;
+      color: #1e293b;
+    }
+    header {
+      background: #0ea5e9;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      font-family: 'Orbitron', sans-serif;
+      margin: 0;
+      font-size: 2rem;
+    }
+    #user-role {
+      font-family: 'Black Ops One', sans-serif;
+      font-size: 1.2rem;
+      background-color: white;
+      color: #0ea5e9;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      border: 2px solid #67e8f9;
+    }
+    .dashboard-container {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .welcome {
+      font-size: 1.4rem;
+      font-style: italic;
+      color: #0369a1;
+      margin-bottom: 2rem;
+      text-align: center;
+      width: 100%;
+    }
+    .card-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .card {
+      background: linear-gradient(135deg, #a5f3fc, #ecfeff);
+      border: 1px solid #67e8f9;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(14, 165, 233, 0.15);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+      flex: 1 1 250px;
+      max-width: 300px;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 30px rgba(14, 165, 233, 0.25);
+    }
+    .card h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #075985;
+      text-align: center;
+    }
+
+    .card-grid a {
+  text-decoration: none;
+}
+
+.card-grid a.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #dbeafe, #eff6ff); /* blue-ish theme for volunteers */
+  border: 1px solid #93c5fd;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  min-height: 140px;
+  flex: 1 1 250px;
+  max-width: 300px;
+}
+
+.card-grid a.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.25);
+}
+
+.card-grid a.card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #1e3a8a;
+  text-align: center;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Volunteer Portal</h1>
+    <div id="user-role">VOLUNTEER</div>
+  </header>
+  <div class="dashboard-container">
+    <div class="welcome">“Helping hands make the difference in every disaster.”</div>
+    <div class="card-grid">
+      <div class="card-grid">
+        <a href="../volunteer_dashboard/my_tasks.html" class="card"><h3>My Tasks</h3></a>
+        <a href="../volunteer_dashboard/report_resource_needs.html" class="card"><h3>Report Resource Needs</h3></a>
+        <a href="../volunteer_dashboard/submit_found_items.html" class="card"><h3>Submit Found Items</h3></a>
+        <a href="../volunteer_dashboard/view_alerts.html" class="card"><h3>View Alerts</h3></a>
+        <a href="../volunteer_dashboard/evacuation_routes.html" class="card"><h3>Evacuation Routes</h3></a>
+        <a href="../volunteer_dashboard/collaboration_hub.html" class="card"><h3>Collaboration Hub</h3></a>
+      </div>
+      
+    </div>
+  </div>
+</body>
+</html>
