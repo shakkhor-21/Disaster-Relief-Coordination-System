@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #10b981, #e0fce9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 2rem 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2);
+      width: 100%;
+      max-width: 400px;
+      transition: all 0.3s ease-in-out;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .header h2 {
+      font-family: 'Black Ops One', sans-serif;
+      color: #10b981;
+      margin: 0;
+      font-size: 2rem;
+      letter-spacing: 1px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input {
+      padding: 0.8rem;
+      border-radius: 10px;
+      border: 1px solid #b7eac9;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+    }
+    input:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+    button[type="submit"] {
+      background: #10b981;
+      color: white;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    button[type="submit"]:hover {
+      background: #0f9f6e;
+    }
+    .error-message {
+      color: #dc2626;
+      text-align: center;
+      margin-top: 1rem;
+      display: none;
+    }
+    .bottom-link {
+      text-align: center;
+      margin-top: 2rem;
+      color: #555;
+      font-size: 0.95rem;
+    }
+    .bottom-link a {
+      color: #10b981;
+      text-decoration: none;
+      font-weight: bold;
+      margin-left: 0.3em;
+    }
+    .bottom-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>DISASTER PORTAL</h2>
+    </div>
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+      <div id="loginError" class="error-message"></div>
+    </form>
+    <div class="role-login-links" style="text-align:center; margin-top:1.5rem;">
+      <button onclick="window.location.href='volunteer_login.html'" style="margin:0 0.5rem; padding:0.6rem 1.2rem; border:none; border-radius:10px; background-color:#f3f4f6; color:#10b981; font-weight:bold; cursor:pointer; transition:background 0.3s, transform 0.2s;">Volunteer Login</button>
+      <button onclick="window.location.href='admin_login.html'" style="margin:0 0.5rem; padding:0.6rem 1.2rem; border:none; border-radius:10px; background-color:#f3f4f6; color:#10b981; font-weight:bold; cursor:pointer; transition:background 0.3s, transform 0.2s;">Admin Login</button>
+    </div>
+    <div class="bottom-link">
+      Not a user? <a href="register.html">Sign up.</a>
+    </div>
+  </div>
+  <script>
+    async function handleLogin(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const email = formData.get('email');
+      const password = formData.get('password');
+      const errorElement = document.getElementById('loginError');
+      try {
+        const response = await fetch('http://localhost:3000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          sessionStorage.setItem('userRole', data.role);
+          sessionStorage.setItem('username', data.username || 'User');
+          window.location.href = data.redirectUrl;
+        } else {
+          errorElement.textContent = data.message || 'Login failed';
+          errorElement.style.display = 'block';
+        }
+      } catch (error) {
+        errorElement.textContent = 'Server error. Please try again.';
+        errorElement.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

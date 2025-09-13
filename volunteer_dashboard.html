@@ -122,15 +122,14 @@
 <body>
   <header>
     <h1>Volunteer Portal</h1>
-    <div id="user-role">VOLUNTEER</div>
+    <div id="user-role">Loading...</div>
   </header>
   <div class="dashboard-container">
-    <div class="welcome">“Helping hands make the difference in every disaster.”</div>
+    <div class="welcome">"Helping hands make the difference in every disaster."</div>
     <div class="card-grid">
       <div class="card-grid">
         <a href="../volunteer_dashboard/my_tasks.html" class="card"><h3>My Tasks</h3></a>
         <a href="../volunteer_dashboard/report_resource_needs.html" class="card"><h3>Report Resource Needs</h3></a>
-        <a href="../volunteer_dashboard/submit_found_items.html" class="card"><h3>Submit Found Items</h3></a>
         <a href="../volunteer_dashboard/view_alerts.html" class="card"><h3>View Alerts</h3></a>
         <a href="../volunteer_dashboard/evacuation_routes.html" class="card"><h3>Evacuation Routes</h3></a>
         <a href="../volunteer_dashboard/collaboration_hub.html" class="card"><h3>Collaboration Hub</h3></a>
@@ -138,5 +137,12 @@
       
     </div>
   </div>
+  <script>
+  // Display the username from sessionStorage
+  document.addEventListener('DOMContentLoaded', function() {
+    const username = sessionStorage.getItem('username') || 'Volunteer';
+    document.getElementById('user-role').textContent = username;
+  });
+  </script>
 </body>
 </html>

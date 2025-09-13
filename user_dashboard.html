@@ -52,7 +52,7 @@
       text-align: center;
       font-size: 1.3rem;
       font-style: italic;
-      color: #047857;
+      color: #000000;
       margin-bottom: 2rem;
     }
 
@@ -123,7 +123,7 @@
 <body>
   <header>
     <h1>User Dashboard</h1>
-    <div id="user-role">USER</div>
+    <div id="user-role">Loading...</div>
   </header>
 
   <div class="dashboard-container">
@@ -138,5 +138,12 @@
       <a href="../user_dashboard/evacuation_info.html" class="card"><h3>Evacuation Info</h3></a>
     </div>    
   </div>
+<script>
+// Display the username from sessionStorage
+document.addEventListener('DOMContentLoaded', function() {
+  const username = sessionStorage.getItem('username') || 'User';
+  document.getElementById('user-role').textContent = username;
+});
+</script>
 </body>
 </html>

@@ -46,7 +46,7 @@
     .welcome {
       font-size: 1.4rem;
       font-style: italic;
-      color: #b91c1c;
+      color: #000000;
       margin-bottom: 2rem;
       text-align: center;
       width: 100%;
@@ -122,7 +122,7 @@
 <body>
   <header>
     <h1>Admin Portal</h1>
-    <div id="user-role">ADMIN</div>
+    <div id="user-role">Loading...</div>
   </header>
   <div class="dashboard-container">
     <div class="welcome">“Preparedness is the calm before, during, and after the storm.”</div>
@@ -133,12 +133,18 @@
       <a href="../admin_dashboard/aid_tracking.html" class="card"><h3>Aid Tracking</h3></a>
       <a href="../admin_dashboard/alerts_notifications.html" class="card"><h3>Alerts & Notifications</h3></a>
       <a href="../admin_dashboard/task_assignment.html" class="card"><h3>Task Assignment</h3></a>
-      <a href="../admin_dashboard/collaboration_hub.html" class="card"><h3>Collaboration Hub</h3></a>
       <a href="../admin_dashboard/evacuation_routes.html" class="card"><h3>Evacuation Routes</h3></a>
-      <a href="../admin_dashboard/lost_found.html" class="card"><h3>Lost & Found</h3></a>
+              <a href="../admin_dashboard/lost_and_found.html" class="card"><h3>Lost & Found</h3></a>
       <a href="../admin_dashboard/donation_management.html" class="card"><h3>Donation Management</h3></a>
     </div>
     
   </div>
+  <script>
+  // Display the username from sessionStorage
+  document.addEventListener('DOMContentLoaded', function() {
+    const username = sessionStorage.getItem('username') || 'Admin';
+    document.getElementById('user-role').textContent = username;
+  });
+  </script>
 </body>
 </html>
