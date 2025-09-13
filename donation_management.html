@@ -36,7 +36,8 @@
     }
     .page-container {
       padding: 2rem;
-      max-width: 1000px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     h2 {
       color: #b91c1c;
@@ -48,6 +49,81 @@
       font-size: 1.05rem;
       color: #374151;
       line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    .donations-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .donations-table th,
+    .donations-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .donations-table th {
+      background: #ef4444;
+      color: white;
+      font-weight: 600;
+      font-family: 'Orbitron', sans-serif;
+    }
+    .donations-table tr:hover {
+      background: #fef2f2;
+    }
+    .donations-table tr:last-child td {
+      border-bottom: none;
+    }
+    .amount {
+      font-weight: 600;
+      color: #059669;
+    }
+    .status {
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    .status.received {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .status.processed {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .status.completed {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .no-donations {
+      text-align: center;
+      padding: 3rem;
+      color: #6b7280;
+      font-style: italic;
+    }
+    .refresh-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      transition: background-color 0.3s ease;
+    }
+    .refresh-btn:hover {
+      background: #dc2626;
+    }
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #6b7280;
     }
   </style>
 </head>
@@ -60,6 +136,75 @@
   <div class="page-container">
     <h2>Donation Management</h2>
     <p>Track incoming donations, manage distribution, and ensure transparency. Coordinate with donors, partners, and field teams to efficiently allocate resources where needed most.</p>
+    
+    <button class="refresh-btn" onclick="loadDonations()">🔄 Refresh Donations</button>
+    
+    <div id="donationsContainer">
+      <div class="loading">Loading donations...</div>
+    </div>
   </div>
+
+  <script>
+    // Load donations when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      loadDonations();
+    });
+
+    async function loadDonations() {
+      const container = document.getElementById('donationsContainer');
+      container.innerHTML = '<div class="loading">Loading donations...</div>';
+      
+      try {
+        const response = await fetch('http://localhost:3000/donations');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch donations');
+        }
+        
+        const donations = await response.json();
+        displayDonations(donations);
+        
+      } catch (error) {
+        console.error('Error loading donations:', error);
+        container.innerHTML = '<div class="no-donations">Error loading donations. Please try again.</div>';
+      }
+    }
+
+    function displayDonations(donations) {
+      const container = document.getElementById('donationsContainer');
+      
+      if (donations.length === 0) {
+        container.innerHTML = '<div class="no-donations">No donations received yet.</div>';
+        return;
+      }
+      
+      const table = `
+        <table class="donations-table">
+          <thead>
+            <tr>
+              <th>Donor Name</th>
+              <th>Amount (BDT)</th>
+              <th>Purpose</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${donations.map(donation => `
+              <tr>
+                <td>${donation.fullName}</td>
+                <td class="amount">${donation.amount.toLocaleString()}</td>
+                <td>${donation.purpose}</td>
+                <td>${new Date(donation.timestamp).toLocaleString()}</td>
+                <td><span class="status ${donation.status.toLowerCase()}">${donation.status}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+      
+      container.innerHTML = table;
+    }
+  </script>
 </body>
 </html>

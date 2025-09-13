@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Volunteer Management</title>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; }
     body {
@@ -36,7 +37,9 @@
     }
     .page-container {
       padding: 2rem;
-      max-width: 1000px;
+      max-width: 1400px;  /* Increased from 1000px */
+      margin: 0 auto;     /* Added to center the container */
+      width: 95%;        /* Added to ensure some padding from viewport edges */
     }
     h2 {
       color: #b91c1c;
@@ -49,7 +52,270 @@
       color: #374151;
       line-height: 1.6;
     }
+    .volunteer-grid {
+      margin-top: 2rem;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      overflow-x: auto;  /* Added to handle table overflow on small screens */
+    }
+
+    .volunteer-filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .volunteer-filters input,
+    .volunteer-filters select {
+      padding: 0.7rem 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .volunteer-filters input:focus,
+    .volunteer-filters select:focus {
+      outline: none;
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    }
+
+    .volunteer-table {
+      width: 100%;
+      min-width: 800px;  /* Added to prevent table from becoming too compressed */
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 1rem;
+    }
+
+    .volunteer-table th {
+      background: #fef2f2;
+      color: #991b1b;
+      font-weight: 600;
+      padding: 1rem;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+    }
+
+    .volunteer-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #f3f4f6;
+      transition: background-color 0.2s;
+      vertical-align: middle;
+    }
+
+    .volunteer-table tbody tr:hover {
+      background-color: #fef2f2;
+    }
+
+    .assignment-section {
+      margin-top: 2rem;
+      background: linear-gradient(to right bottom, #fff, #fef2f2);
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border: 1px solid #fee2e2;
+    }
+
+    .assignment-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .task-assignment,
+    .add-volunteer {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .assignment-section h3 {
+      color: #991b1b;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      margin-top: 0;
+    }
+
+    #assignment-form,
+    #add-volunteer-form {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    #assignment-form select,
+    #assignment-form input,
+    #add-volunteer-form select,
+    #add-volunteer-form input {
+      padding: 0.8rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    #assignment-form select:focus,
+    #assignment-form input:focus,
+    #add-volunteer-form select:focus,
+    #add-volunteer-form input:focus {
+      outline: none;
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    }
+
+    #assignment-form button,
+    #add-volunteer-form button {
+      background: #ef4444;
+      color: white;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #assignment-form button:hover,
+    #add-volunteer-form button:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(239, 68, 68, 0.1);
+    }
+
+    #add-volunteer-form small {
+      color: #6b7280;
+      font-size: 0.85rem;
+      margin-top: -0.8rem;
+    }
+
+    #volunteer-skills {
+      min-height: 80px;
+    }
+
+    .status-change-select {
+      padding: 0.3rem 0.5rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      margin-right: 0.5rem;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .status-change-select:focus {
+      outline: none;
+      border-color: #ef4444;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+    }
+
+    .status-badge {
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .status-active {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-inactive {
+      background: #f3f4f6;
+      color: #4b5563;
+    }
+
+    .status-deployed {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .action-btn {
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .edit-btn {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .delete-btn {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(95%);
+    }
+
+    .skill-badge {
+      background: #f3f4f6;
+      color: #4b5563;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      display: inline-block;
+      margin: 0.1rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: #6b7280;
+      font-style: italic;
+    }
   </style>
+  <script>
+    // Add animation when new volunteers are added
+    function animateRow(row) {
+      row.style.animation = 'slideIn 0.3s ease-out';
+    }
+
+    // Add hover effects for interactive elements
+    document.querySelectorAll('.action-btn').forEach(btn => {
+      btn.addEventListener('mouseenter', e => {
+        e.target.style.transform = 'translateY(-2px)';
+      });
+      btn.addEventListener('mouseleave', e => {
+        e.target.style.transform = 'translateY(0)';
+      });
+    });
+
+    // Add keyframe animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
 </head>
 <body>
   <header>
@@ -60,6 +326,342 @@
   <div class="page-container">
     <h2>Volunteer Management</h2>
     <p>View, assign, and coordinate volunteers across different tasks and locations. Keep track of availability, skillsets, and deployment efficiency.</p>
+    <div class="volunteer-grid">
+      <div class="volunteer-filters">
+        <input type="text" placeholder="Search volunteers..." id="search-volunteer">
+        <select id="skill-filter">
+          <option value="">All Skills</option>
+          <option value="medical">Medical</option>
+          <option value="rescue">Rescue</option>
+          <option value="logistics">Logistics</option>
+        </select>
+        <select id="status-filter">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="deployed">Deployed</option>
+        </select>
+      </div>
+      
+      <table class="volunteer-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Skills</th>
+            <th>Status</th>
+            <th>Location</th>
+            <th>Contact</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="volunteer-list">
+          <!-- Volunteer entries will be populated here -->
+        </tbody>
+      </table>
+    </div>
+    <div class="assignment-section">
+      <div class="assignment-container">
+        <div class="task-assignment">
+          <h3>Task Assignment</h3>
+          <form id="assignment-form">
+            <select id="volunteer-select" required>
+              <option value="">Select Volunteer</option>
+            </select>
+            <select id="task-select" required>
+              <option value="">Select Task</option>
+              <option value="medical-aid">Medical Aid</option>
+              <option value="rescue-op">Rescue Operation</option>
+              <option value="supply-dist">Supply Distribution</option>
+            </select>
+            <input type="datetime-local" id="assignment-time" required>
+            <button type="submit">Assign Task</button>
+          </form>
+        </div>
+        
+        <div class="add-volunteer">
+          <h3>Add New Volunteer</h3>
+          <form id="add-volunteer-form">
+            <input type="text" id="volunteer-name" placeholder="Full Name" required>
+            <input type="text" id="volunteer-contact" placeholder="Phone Number" required>
+            <input type="text" id="volunteer-location" placeholder="Location" required>
+            <select id="volunteer-skills" multiple>
+              <option value="medical">Medical</option>
+              <option value="rescue">Rescue</option>
+              <option value="logistics">Logistics</option>
+              <option value="first-aid">First Aid</option>
+              <option value="coordination">Coordination</option>
+            </select>
+            <small>Hold Ctrl/Cmd to select multiple skills</small>
+            <select id="volunteer-status">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="deployed">Deployed</option>
+            </select>
+            <button type="submit">Add Volunteer</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
+  <script>
+// Load volunteers from localStorage or use default data
+function loadVolunteers() {
+  const savedVolunteers = localStorage.getItem('volunteers');
+  if (savedVolunteers) {
+    return JSON.parse(savedVolunteers);
+  }
+  
+  // Default volunteer data if none saved
+  return [
+    {
+      id: 1,
+      name: "John Smith",
+      skills: ["medical", "first-aid"],
+      status: "active",
+      location: "Central Hospital",
+      contact: "+1 234-567-8901"
+    },
+    {
+      id: 2,
+      name: "Sarah Johnson",
+      skills: ["rescue", "first-aid"],
+      status: "deployed",
+      location: "East District",
+      contact: "+1 234-567-8902"
+    },
+    {
+      id: 3,
+      name: "Michael Chen",
+      skills: ["logistics", "coordination"],
+      status: "active",
+      location: "Supply Center",
+      contact: "+1 234-567-8903"
+    },
+    {
+      id: 4,
+      name: "Emily Brown",
+      skills: ["medical", "coordination"],
+      status: "inactive",
+      location: "West District",
+      contact: "+1 234-567-8904"
+    }
+  ];
+}
+
+// Save volunteers to localStorage
+function saveVolunteers() {
+  localStorage.setItem('volunteers', JSON.stringify(volunteers));
+}
+
+// Initialize volunteers array
+let volunteers = loadVolunteers();
+
+// Function to populate volunteer list
+function populateVolunteerList(volunteers) {
+  const volunteerList = document.getElementById('volunteer-list');
+  volunteerList.innerHTML = '';
+
+  volunteers.forEach(volunteer => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${volunteer.name}</td>
+      <td><span class="skill-badge">${volunteer.skills.join(', ')}</span></td>
+      <td><span class="status-badge status-${volunteer.status}">${volunteer.status}</span></td>
+      <td>${volunteer.location}</td>
+      <td>${volunteer.contact}</td>
+      <td class="action-buttons">
+        <select class="status-change-select" onchange="changeVolunteerStatus(${volunteer.id}, this.value)">
+          <option value="${volunteer.status}" selected>${volunteer.status}</option>
+          ${volunteer.status !== 'active' ? '<option value="active">active</option>' : ''}
+          ${volunteer.status !== 'inactive' ? '<option value="inactive">inactive</option>' : ''}
+          ${volunteer.status !== 'deployed' ? '<option value="deployed">deployed</option>' : ''}
+        </select>
+        <button class="action-btn edit-btn" onclick="editVolunteer(${volunteer.id})">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+        <button class="action-btn delete-btn" onclick="deleteVolunteer(${volunteer.id})">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      </td>
+    `;
+    volunteerList.appendChild(row);
+    animateRow(row);
+  });
+
+  // Populate volunteer select in assignment form
+  const volunteerSelect = document.getElementById('volunteer-select');
+  volunteerSelect.innerHTML = '<option value="">Select Volunteer</option>';
+  volunteers.filter(v => v.status === 'active').forEach(volunteer => {
+    volunteerSelect.innerHTML += `<option value="${volunteer.id}">${volunteer.name}</option>`;
+  });
+}
+
+// Search and filter functionality
+function filterVolunteers() {
+  const searchTerm = document.getElementById('search-volunteer').value.toLowerCase();
+  const skillFilter = document.getElementById('skill-filter').value;
+  const statusFilter = document.getElementById('status-filter').value;
+
+  const filteredVolunteers = volunteers.filter(volunteer => {
+    const matchesSearch = volunteer.name.toLowerCase().includes(searchTerm);
+    const matchesSkill = !skillFilter || volunteer.skills.includes(skillFilter);
+    const matchesStatus = !statusFilter || volunteer.status === statusFilter;
+    return matchesSearch && matchesSkill && matchesStatus;
+  });
+
+  populateVolunteerList(filteredVolunteers);
+}
+
+// Event listeners for filters
+document.getElementById('search-volunteer').addEventListener('input', filterVolunteers);
+document.getElementById('skill-filter').addEventListener('change', filterVolunteers);
+document.getElementById('status-filter').addEventListener('change', filterVolunteers);
+
+// Handle task assignment
+document.getElementById('assignment-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const volunteerId = document.getElementById('volunteer-select').value;
+  const task = document.getElementById('task-select').value;
+  const time = document.getElementById('assignment-time').value;
+  
+  if (volunteerId && task && time) {
+    alert(`Task assigned successfully!\nVolunteer: ${volunteerId}\nTask: ${task}\nTime: ${time}`);
+    this.reset();
+  }
+});
+
+// Handle adding new volunteer or updating existing volunteer
+document.getElementById('add-volunteer-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('volunteer-name').value;
+  const contact = document.getElementById('volunteer-contact').value;
+  const location = document.getElementById('volunteer-location').value;
+  const skillsSelect = document.getElementById('volunteer-skills');
+  const selectedSkills = Array.from(skillsSelect.selectedOptions).map(option => option.value);
+  const status = document.getElementById('volunteer-status').value;
+  const submitBtn = this.querySelector('button');
+  const editId = submitBtn.dataset.editId;
+  
+  if (name && contact && location && selectedSkills.length > 0) {
+    if (editId) {
+      // Update existing volunteer
+      const volunteerIndex = volunteers.findIndex(v => v.id == editId);
+      if (volunteerIndex > -1) {
+        volunteers[volunteerIndex] = {
+          ...volunteers[volunteerIndex],
+          name: name,
+          skills: selectedSkills,
+          status: status,
+          location: location,
+          contact: contact
+        };
+      }
+      
+      // Reset to add mode
+      resetToAddMode();
+    } else {
+      // Add new volunteer
+      const newId = Math.max(...volunteers.map(v => v.id)) + 1;
+      
+      const newVolunteer = {
+        id: newId,
+        name: name,
+        skills: selectedSkills,
+        status: status,
+        location: location,
+        contact: contact
+      };
+      
+      volunteers.push(newVolunteer);
+    }
+    
+    // Save to localStorage
+    saveVolunteers();
+    
+    // Refresh the volunteer list
+    populateVolunteerList(volunteers);
+    
+    // Reset form
+    this.reset();
+  } else {
+    alert('Please fill in all fields and select at least one skill.');
+  }
+});
+
+// Function to edit volunteer
+function editVolunteer(id) {
+  const volunteer = volunteers.find(v => v.id === id);
+  if (!volunteer) return;
+  
+  // Pre-fill the add volunteer form with existing data
+  document.getElementById('volunteer-name').value = volunteer.name;
+  document.getElementById('volunteer-contact').value = volunteer.contact;
+  document.getElementById('volunteer-location').value = volunteer.location;
+  document.getElementById('volunteer-status').value = volunteer.status;
+  
+  // Select the volunteer's skills
+  const skillsSelect = document.getElementById('volunteer-skills');
+  Array.from(skillsSelect.options).forEach(option => {
+    option.selected = volunteer.skills.includes(option.value);
+  });
+  
+  // Change the form button text and add data attribute
+  const submitBtn = document.querySelector('#add-volunteer-form button');
+  submitBtn.textContent = 'Update Volunteer';
+  submitBtn.dataset.editId = id;
+  
+  // Change the form title
+  const formTitle = document.querySelector('.add-volunteer h3');
+  formTitle.textContent = 'Edit Volunteer';
+  
+  // Scroll to the form
+  document.querySelector('.add-volunteer').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Function to reset the add volunteer form to add mode
+function resetToAddMode() {
+  const submitBtn = document.querySelector('#add-volunteer-form button');
+  submitBtn.textContent = 'Add Volunteer';
+  delete submitBtn.dataset.editId;
+  
+  const formTitle = document.querySelector('.add-volunteer h3');
+  formTitle.textContent = 'Add New Volunteer';
+}
+
+// Function to change volunteer status
+function changeVolunteerStatus(id, newStatus) {
+  const volunteerIndex = volunteers.findIndex(v => v.id === id);
+  if (volunteerIndex > -1) {
+    volunteers[volunteerIndex].status = newStatus;
+    
+    // Save to localStorage
+    saveVolunteers();
+    
+    // Refresh the volunteer list to update status badge and dropdown
+    populateVolunteerList(volunteers);
+  }
+}
+
+// Function to delete volunteer
+function deleteVolunteer(id) {
+  if (confirm('Are you sure you want to delete this volunteer?')) {
+    const index = volunteers.findIndex(v => v.id === id);
+    if (index > -1) {
+      volunteers.splice(index, 1);
+      
+      // Save to localStorage
+      saveVolunteers();
+      
+      populateVolunteerList(volunteers);
+      alert('Volunteer deleted successfully!');
+    }
+  }
+}
+
+// Initial population
+populateVolunteerList(volunteers);
+</script>
 </body>
 </html>
+``` 

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Task Assignment</title>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body {
@@ -36,7 +37,8 @@
     }
     .page-container {
       padding: 2rem;
-      max-width: 1000px;
+      max-width: 1400px;
+      margin: 0 auto;
     }
     h2 {
       color: #b91c1c;
@@ -44,10 +46,222 @@
       font-family: 'Orbitron', sans-serif;
       margin-bottom: 1rem;
     }
-    p {
-      font-size: 1.05rem;
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border: 1px solid #fecaca;
+    }
+    .card h3 {
+      color: #dc2626;
+      font-family: 'Orbitron', sans-serif;
+      margin: 0 0 1rem 0;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
       color: #374151;
-      line-height: 1.6;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #fecaca;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #ef4444;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn:hover {
+      background: #dc2626;
+    }
+    .btn-secondary {
+      background: #6b7280;
+    }
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
+    .priority-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    .priority-high {
+      background: #fecaca;
+      color: #dc2626;
+    }
+    .priority-medium {
+      background: #fed7aa;
+      color: #ea580c;
+    }
+    .priority-low {
+      background: #d1fae5;
+      color: #059669;
+    }
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    .status-pending {
+      background: #fef3c7;
+      color: #d97706;
+    }
+    .status-in-progress {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+    .status-completed {
+      background: #d1fae5;
+      color: #059669;
+    }
+    .task-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .task-item {
+      background: #fef7f7;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .task-header {
+      display: flex;
+      justify-content: between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .task-title {
+      font-weight: 600;
+      color: #1f2937;
+      flex: 1;
+    }
+    .task-meta {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .task-description {
+      color: #6b7280;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    .task-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .btn-small {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.875rem;
+    }
+    .filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .filter-group select {
+      width: auto;
+      min-width: 150px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid #fecaca;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #dc2626;
+      font-family: 'Orbitron', sans-serif;
+    }
+    .stat-label {
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
+    .volunteer-select {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .volunteer-chip {
+      background: #fef7f7;
+      border: 1px solid #fecaca;
+      border-radius: 999px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .volunteer-chip:hover {
+      background: #fecaca;
+    }
+    .volunteer-chip.selected {
+      background: #ef4444;
+      color: white;
+      border-color: #ef4444;
+    }
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      .filters {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -58,8 +272,408 @@
   </header>
 
   <div class="page-container">
-    <h2>Task Assignment</h2>
-    <p>Assign and delegate tasks to volunteers and teams. Monitor progress and reassign responsibilities dynamically based on field conditions.</p>
+    <h2><i class="fas fa-tasks"></i> Task Assignment Dashboard</h2>
+    
+    <!-- Statistics Overview -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="total-tasks">12</div>
+        <div class="stat-label">Total Tasks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="pending-tasks">5</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="active-tasks">4</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="completed-tasks">3</div>
+        <div class="stat-label">Completed</div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- Create New Task -->
+      <div class="card">
+        <h3><i class="fas fa-plus-circle"></i> Create New Task</h3>
+        <form id="task-form">
+          <div class="form-group">
+            <label for="task-title">Task Title</label>
+            <input type="text" id="task-title" placeholder="Enter task title" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="task-description">Description</label>
+            <textarea id="task-description" placeholder="Describe the task details"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="task-category">Category</label>
+            <select id="task-category" required>
+              <option value="">Select category</option>
+              <option value="rescue">Search & Rescue</option>
+              <option value="medical">Medical Aid</option>
+              <option value="supplies">Supply Distribution</option>
+              <option value="evacuation">Evacuation Support</option>
+              <option value="communication">Communication</option>
+              <option value="logistics">Logistics</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="task-priority">Priority Level</label>
+            <select id="task-priority" required>
+              <option value="">Select priority</option>
+              <option value="high">High - Urgent</option>
+              <option value="medium">Medium - Important</option>
+              <option value="low">Low - When Available</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="task-location">Location</label>
+            <input type="text" id="task-location" placeholder="Task location">
+          </div>
+          
+          <div class="form-group">
+            <label for="task-deadline">Deadline</label>
+            <input type="datetime-local" id="task-deadline">
+          </div>
+          
+          <div class="form-group">
+            <label>Assign Volunteers</label>
+            <div class="volunteer-select" id="volunteer-select">
+              <!-- Volunteer chips will be populated dynamically -->
+            </div>
+          </div>
+          
+          <button type="submit" class="btn">
+            <i class="fas fa-plus"></i> Create Task
+          </button>
+        </form>
+      </div>
+
+      <!-- Task Management -->
+      <div class="card">
+        <h3><i class="fas fa-list-check"></i> Active Tasks</h3>
+        
+        <div class="filters">
+          <div class="filter-group">
+            <label>Status</label>
+            <select id="status-filter">
+              <option value="">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="in-progress">In Progress</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label>Priority</label>
+            <select id="priority-filter">
+              <option value="">All Priorities</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label>Category</label>
+            <select id="category-filter">
+              <option value="">All Categories</option>
+              <option value="rescue">Search & Rescue</option>
+              <option value="medical">Medical Aid</option>
+              <option value="supplies">Supply Distribution</option>
+              <option value="evacuation">Evacuation Support</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="task-list" id="task-list">
+          <!-- Sample tasks will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
   </div>
+
+  <script>
+    // Load volunteers from localStorage or use default data
+    function loadVolunteers() {
+      const savedVolunteers = localStorage.getItem('volunteers');
+      if (savedVolunteers) {
+        return JSON.parse(savedVolunteers);
+      }
+      
+      // Default volunteer data if none saved
+      return [
+        {
+          id: 1,
+          name: "John Smith",
+          skills: ["medical", "first-aid"],
+          status: "active",
+          location: "Central Hospital",
+          contact: "+1 234-567-8901"
+        },
+        {
+          id: 2,
+          name: "Sarah Johnson",
+          skills: ["rescue", "first-aid"],
+          status: "deployed",
+          location: "East District",
+          contact: "+1 234-567-8902"
+        },
+        {
+          id: 3,
+          name: "Michael Chen",
+          skills: ["logistics", "coordination"],
+          status: "active",
+          location: "Supply Center",
+          contact: "+1 234-567-8903"
+        },
+        {
+          id: 4,
+          name: "Emily Brown",
+          skills: ["medical", "coordination"],
+          status: "inactive",
+          location: "West District",
+          contact: "+1 234-567-8904"
+        }
+      ];
+    }
+
+    // Load tasks from localStorage or use default data
+    function loadTasks() {
+      const savedTasks = localStorage.getItem('tasks');
+      if (savedTasks) {
+        return JSON.parse(savedTasks);
+      }
+      
+      // Default task data if none saved
+      return [
+        {
+          id: 1,
+          title: "Emergency Medical Supply Distribution",
+          description: "Distribute medical supplies to evacuation centers in Zone A",
+          category: "medical",
+          priority: "high",
+          status: "in-progress",
+          location: "Zone A Evacuation Center",
+          deadline: "2025-09-12T20:00",
+          assignedVolunteers: [1, 2],
+          createdAt: "2025-09-12T10:00"
+        },
+        {
+          id: 2,
+          title: "Search and Rescue Operation",
+          description: "Search for missing persons in flood-affected area",
+          category: "rescue",
+          priority: "high",
+          status: "pending",
+          location: "Riverside District",
+          deadline: "2025-09-12T18:00",
+          assignedVolunteers: [3],
+          createdAt: "2025-09-12T09:30"
+        },
+        {
+          id: 3,
+          title: "Food Distribution Setup",
+          description: "Set up food distribution point at community center",
+          category: "supplies",
+          priority: "medium",
+          status: "completed",
+          location: "Community Center",
+          deadline: "2025-09-12T16:00",
+          assignedVolunteers: [2, 4],
+          createdAt: "2025-09-12T08:00"
+        }
+      ];
+    }
+
+    // Save tasks to localStorage
+    function saveTasks() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    // Initialize data
+    let volunteers = loadVolunteers();
+    let tasks = loadTasks();
+
+    // Create volunteer names mapping from loaded data
+    function createVolunteerNamesMapping() {
+      const mapping = {};
+      volunteers.forEach(volunteer => {
+        mapping[volunteer.id] = volunteer.name;
+      });
+      return mapping;
+    }
+
+    let volunteerNames = createVolunteerNamesMapping();
+
+    // Function to populate volunteer chips
+    function populateVolunteerChips() {
+      const volunteerSelect = document.getElementById('volunteer-select');
+      volunteerSelect.innerHTML = '';
+      
+      volunteers.forEach(volunteer => {
+        const chip = document.createElement('div');
+        chip.className = 'volunteer-chip';
+        chip.dataset.volunteer = volunteer.id;
+        chip.textContent = volunteer.name;
+        chip.addEventListener('click', function() {
+          this.classList.toggle('selected');
+        });
+        volunteerSelect.appendChild(chip);
+      });
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      populateVolunteerChips();
+      renderTasks();
+      updateStats();
+      setupEventListeners();
+    });
+
+    function setupEventListeners() {
+      // Task form submission
+      document.getElementById('task-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        createTask();
+      });
+
+      // Volunteer selection is now handled in populateVolunteerChips()
+
+      // Filters
+      document.getElementById('status-filter').addEventListener('change', renderTasks);
+      document.getElementById('priority-filter').addEventListener('change', renderTasks);
+      document.getElementById('category-filter').addEventListener('change', renderTasks);
+    }
+
+    function createTask() {
+      const formData = {
+        id: Date.now(), // Use timestamp for unique ID
+        title: document.getElementById('task-title').value,
+        description: document.getElementById('task-description').value,
+        category: document.getElementById('task-category').value,
+        priority: document.getElementById('task-priority').value,
+        status: 'pending',
+        location: document.getElementById('task-location').value,
+        deadline: document.getElementById('task-deadline').value,
+        assignedVolunteers: Array.from(document.querySelectorAll('.volunteer-chip.selected'))
+          .map(chip => parseInt(chip.dataset.volunteer)),
+        createdAt: new Date().toISOString()
+      };
+
+      tasks.unshift(formData);
+      saveTasks(); // Save to localStorage
+      
+      // Reset form
+      document.getElementById('task-form').reset();
+      document.querySelectorAll('.volunteer-chip.selected').forEach(chip => {
+        chip.classList.remove('selected');
+      });
+
+      renderTasks();
+      updateStats();
+      
+      // Show success message
+      alert('Task created and assigned successfully!');
+    }
+
+    function renderTasks() {
+      const statusFilter = document.getElementById('status-filter').value;
+      const priorityFilter = document.getElementById('priority-filter').value;
+      const categoryFilter = document.getElementById('category-filter').value;
+
+      let filteredTasks = tasks.filter(task => {
+        return (!statusFilter || task.status === statusFilter) &&
+               (!priorityFilter || task.priority === priorityFilter) &&
+               (!categoryFilter || task.category === categoryFilter);
+      });
+
+      const taskList = document.getElementById('task-list');
+      taskList.innerHTML = '';
+
+      filteredTasks.forEach(task => {
+        const taskElement = document.createElement('div');
+        taskElement.className = 'task-item';
+        taskElement.innerHTML = `
+          <div class="task-header">
+            <div class="task-title">${task.title}</div>
+            <div class="task-meta">
+              <span class="priority-badge priority-${task.priority}">${task.priority.toUpperCase()}</span>
+              <span class="status-badge status-${task.status}">${task.status.replace('-', ' ').toUpperCase()}</span>
+            </div>
+          </div>
+          <div class="task-description">${task.description}</div>
+          <div class="task-meta">
+            <i class="fas fa-map-marker-alt"></i> ${task.location}
+            <i class="fas fa-clock"></i> ${new Date(task.deadline).toLocaleString()}
+            <i class="fas fa-users"></i> ${task.assignedVolunteers.map(v => volunteerNames[v]).join(', ')}
+          </div>
+          <div class="task-actions">
+            <button class="btn btn-small" onclick="updateTaskStatus(${task.id}, 'in-progress')">
+              <i class="fas fa-play"></i> Start
+            </button>
+            <button class="btn btn-small" onclick="updateTaskStatus(${task.id}, 'completed')">
+              <i class="fas fa-check"></i> Complete
+            </button>
+            <button class="btn btn-secondary btn-small" onclick="editTask(${task.id})">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+          </div>
+        `;
+        taskList.appendChild(taskElement);
+      });
+    }
+
+    function updateTaskStatus(taskId, newStatus) {
+      const task = tasks.find(t => t.id === taskId);
+      if (task) {
+        task.status = newStatus;
+        saveTasks(); // Save to localStorage
+        renderTasks();
+        updateStats();
+      }
+    }
+
+    function editTask(taskId) {
+      const task = tasks.find(t => t.id === taskId);
+      if (task) {
+        // Populate form with task data for editing
+        document.getElementById('task-title').value = task.title;
+        document.getElementById('task-description').value = task.description;
+        document.getElementById('task-category').value = task.category;
+        document.getElementById('task-priority').value = task.priority;
+        document.getElementById('task-location').value = task.location;
+        document.getElementById('task-deadline').value = task.deadline;
+        
+        // Select assigned volunteers
+        document.querySelectorAll('.volunteer-chip').forEach(chip => {
+          chip.classList.toggle('selected', task.assignedVolunteers.includes(chip.dataset.volunteer));
+        });
+        
+        // Remove the task from the list (it will be re-added when form is submitted)
+        tasks = tasks.filter(t => t.id !== taskId);
+        renderTasks();
+        updateStats();
+      }
+    }
+
+    function updateStats() {
+      const totalTasks = tasks.length;
+      const pendingTasks = tasks.filter(t => t.status === 'pending').length;
+      const activeTasks = tasks.filter(t => t.status === 'in-progress').length;
+      const completedTasks = tasks.filter(t => t.status === 'completed').length;
+
+      document.getElementById('total-tasks').textContent = totalTasks;
+      document.getElementById('pending-tasks').textContent = pendingTasks;
+      document.getElementById('active-tasks').textContent = activeTasks;
+      document.getElementById('completed-tasks').textContent = completedTasks;
+    }
+  </script>
 </body>
 </html>

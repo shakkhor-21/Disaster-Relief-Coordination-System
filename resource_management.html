@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Resource Management</title>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; }
     body {
@@ -36,7 +37,8 @@
     }
     .page-container {
       padding: 2rem;
-      max-width: 1000px;
+      max-width: 1400px;
+      margin: 0 auto;
     }
     h2 {
       color: #b91c1c;
@@ -44,10 +46,231 @@
       font-family: 'Orbitron', sans-serif;
       margin-bottom: 1rem;
     }
-    p {
-      font-size: 1.05rem;
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    .btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
+    }
+    .btn.secondary {
+      background: #6b7280;
+    }
+    .btn.secondary:hover {
+      background: #4b5563;
+    }
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .resource-category {
+      background: white;
+      border: 2px solid #fecaca;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(239, 68, 68, 0.1);
+    }
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid #fecaca;
+    }
+    .category-icon {
+      font-size: 2rem;
+      color: #ef4444;
+      width: 3rem;
+      text-align: center;
+    }
+    .category-title {
+      color: #b91c1c;
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.3rem;
+    }
+    .resource-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+            .resource-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.8rem;
+          margin: 0.5rem 0;
+          background: #fef2f2;
+          border-radius: 8px;
+          border: 1px solid #fecaca;
+          position: relative;
+        }
+    .resource-info {
+      flex: 1;
+    }
+    .resource-name {
+      font-weight: 600;
       color: #374151;
-      line-height: 1.6;
+      margin-bottom: 0.2rem;
+    }
+    .resource-details {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+    .resource-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .resource-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-left: 1rem;
+    }
+    .btn-edit, .btn-delete {
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.3s;
+    }
+    .btn-edit {
+      background: #3b82f6;
+      color: white;
+    }
+    .btn-edit:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+    .btn-delete {
+      background: #ef4444;
+      color: white;
+    }
+    .btn-delete:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+    }
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .status-high { background: #10b981; }
+    .status-medium { background: #f59e0b; }
+    .status-low { background: #ef4444; }
+    .status-out { background: #6b7280; }
+    .add-resource-form {
+      background: white;
+      border: 2px solid #fecaca;
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      display: none;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group label {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 0.8rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .stat-card {
+      background: white;
+      border: 2px solid #fecaca;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(239, 68, 68, 0.1);
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ef4444;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+    .search-filter {
+      background: white;
+      border: 2px solid #fecaca;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .filter-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      min-width: 200px;
+    }
+    .filter-group label {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .filter-group input, .filter-group select {
+      padding: 0.6rem;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -58,8 +281,827 @@
   </header>
 
   <div class="page-container">
-    <h2>Resource Management</h2>
-    <p>Track and manage critical resources like food, water, medicine, and shelter capacity. Ensure efficient allocation and inventory control across affected regions.</p>
+    <h2><i class="fas fa-boxes"></i> Resource Management</h2>
+    
+    <!-- Statistics Overview -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">1,247</div>
+        <div class="stat-label">Total Resources</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">89</div>
+        <div class="stat-label">Low Stock Items</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">23</div>
+        <div class="stat-label">Out of Stock</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">$45,230</div>
+        <div class="stat-label">Total Value</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn" id="add-resource-btn">
+        <i class="fas fa-plus"></i> Add New Resource
+      </button>
+      <button class="btn secondary" id="export-btn">
+        <i class="fas fa-download"></i> Export Inventory
+      </button>
+      <button class="btn secondary" id="refresh-btn">
+        <i class="fas fa-sync"></i> Refresh Data
+      </button>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="search-filter">
+      <h3 style="margin-top: 0; color: #b91c1c;">Search & Filter Resources</h3>
+      <div class="filter-row">
+        <div class="filter-group">
+          <label>Search Resources</label>
+          <input type="text" id="search-input" placeholder="Search by name, category, or location...">
+        </div>
+        <div class="filter-group">
+          <label>Category</label>
+          <select id="category-filter">
+            <option value="">All Categories</option>
+            <option value="medical">Medical Supplies</option>
+            <option value="rescue">Rescue Equipment</option>
+            <option value="shelter">Shelter & Basic Needs</option>
+            <option value="transport">Transportation</option>
+            <option value="communication">Communication</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Status</label>
+          <select id="status-filter">
+            <option value="">All Status</option>
+            <option value="high">High Stock</option>
+            <option value="medium">Medium Stock</option>
+            <option value="low">Low Stock</option>
+            <option value="out">Out of Stock</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Location</label>
+          <input type="text" id="location-filter" placeholder="Filter by location...">
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Resource Form -->
+    <div class="add-resource-form" id="add-resource-form">
+      <h3 style="margin-top: 0; color: #b91c1c;">Add New Resource</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Resource Name</label>
+          <input type="text" id="resource-name" placeholder="e.g., First Aid Kit">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="resource-category">
+            <option value="medical">Medical Supplies</option>
+            <option value="rescue">Rescue Equipment</option>
+            <option value="shelter">Shelter & Basic Needs</option>
+            <option value="transport">Transportation</option>
+            <option value="communication">Communication</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="number" id="resource-quantity" placeholder="0" min="0">
+        </div>
+        <div class="form-group">
+          <label>Unit</label>
+          <input type="text" id="resource-unit" placeholder="e.g., pieces, boxes, liters">
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="resource-location" placeholder="e.g., Warehouse A, Medical Center">
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="resource-status">
+            <option value="high">High Stock</option>
+            <option value="medium">Medium Stock</option>
+            <option value="low">Low Stock</option>
+            <option value="out">Out of Stock</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="resource-description" placeholder="Describe the resource, specifications, or special notes..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Expiry Date (if applicable)</label>
+          <input type="date" id="resource-expiry">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn" id="save-resource-btn">
+          <i class="fas fa-save"></i> Save Resource
+        </button>
+        <button class="btn secondary" id="cancel-resource-btn">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+      </div>
+    </div>
+
+    <!-- Edit Resource Form -->
+    <div class="add-resource-form" id="edit-resource-form" style="display: none;">
+      <h3 style="margin-top: 0; color: #b91c1c;">Edit Resource</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Resource Name</label>
+          <input type="text" id="edit-resource-name" placeholder="e.g., First Aid Kit">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="edit-resource-category">
+            <option value="medical">Medical Supplies</option>
+            <option value="rescue">Rescue Equipment</option>
+            <option value="shelter">Shelter & Basic Needs</option>
+            <option value="transport">Transportation</option>
+            <option value="communication">Communication</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="number" id="edit-resource-quantity" placeholder="0" min="0">
+        </div>
+        <div class="form-group">
+          <label>Unit</label>
+          <input type="text" id="edit-resource-unit" placeholder="e.g., pieces, boxes, liters">
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="edit-resource-location" placeholder="e.g., Warehouse A, Medical Center">
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="edit-resource-status">
+            <option value="high">High Stock</option>
+            <option value="medium">Medium Stock</option>
+            <option value="low">Low Stock</option>
+            <option value="out">Out of Stock</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="edit-resource-description" placeholder="Describe the resource, specifications, or special notes..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Expiry Date (if applicable)</label>
+          <input type="date" id="edit-resource-expiry">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn" id="update-resource-btn">
+          <i class="fas fa-save"></i> Update Resource
+        </button>
+        <button class="btn secondary" id="cancel-edit-btn">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+      </div>
+    </div>
+
+    <!-- Resource Categories -->
+    <div class="resource-grid">
+      <!-- Medical Supplies -->
+      <div class="resource-category">
+        <div class="category-header">
+          <div class="category-icon">🚑</div>
+          <h3 class="category-title">Medical Supplies</h3>
+        </div>
+        <ul class="resource-list">
+          <li class="resource-item" data-resource-id="1" data-resource-name="First Aid Kits" data-resource-category="medical" data-resource-quantity="150" data-resource-unit="units" data-resource-location="Warehouse A" data-resource-status="high" data-resource-description="Complete first aid kits with bandages, antiseptics, and basic medical supplies" data-resource-expiry="2025-12">
+            <div class="resource-info">
+              <div class="resource-name">First Aid Kits</div>
+              <div class="resource-details">150 units • Warehouse A • Expires: 2025-12</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-high"></span>
+              High Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item" data-resource-id="2" data-resource-name="Pain Relievers" data-resource-category="medical" data-resource-quantity="500" data-resource-unit="tablets" data-resource-location="Medical Center" data-resource-status="medium" data-resource-description="Standard pain relief tablets for emergency use" data-resource-expiry="2024-06">
+            <div class="resource-info">
+              <div class="resource-name">Pain Relievers</div>
+              <div class="resource-details">500 tablets • Medical Center • Expires: 2024-06</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-medium"></span>
+              Medium Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item" data-resource-id="4" data-resource-name="Oxygen Tanks" data-resource-category="medical" data-resource-quantity="25" data-resource-unit="units" data-resource-location="Emergency Depot" data-resource-status="low" data-resource-description="Oxygen tanks for emergency use" data-resource-expiry="">
+            <div class="resource-info">
+              <div class="resource-name">Oxygen Tanks</div>
+              <div class="resource-details">25 units • Emergency Depot • No expiry</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-low"></span>
+              Low Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item" data-resource-id="3" data-resource-name="Medical Supplies" data-resource-category="medical" data-resource-quantity="200" data-resource-unit="kits" data-resource-location="Warehouse B" data-resource-status="medium" data-resource-description="Essential medical supplies for emergency use" data-resource-expiry="2025-08">
+            <div class="resource-info">
+              <div class="resource-name">Medical Supplies</div>
+              <div class="resource-details">200 kits • Warehouse B • Expires: 2025-08</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-medium"></span>
+              Medium Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Rescue Equipment -->
+      <div class="resource-category">
+        <div class="category-header">
+          <div class="category-icon">🛟</div>
+          <h3 class="category-title">Rescue Equipment</h3>
+        </div>
+        <ul class="resource-list">
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Rescue Ropes</div>
+              <div class="resource-details">200 meters • Equipment Shed • No expiry</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-high"></span>
+              High Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Life Jackets</div>
+              <div class="resource-details">75 units • Water Rescue Unit • No expiry</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-medium"></span>
+              Medium Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Cutting Tools</div>
+              <div class="resource-details">15 sets • Equipment Shed • No expiry</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-low"></span>
+              Low Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Shelter & Basic Needs -->
+      <div class="resource-category">
+        <div class="category-header">
+          <div class="category-icon">🏠</div>
+          <h3 class="category-title">Shelter & Basic Needs</h3>
+        </div>
+        <ul class="resource-list">
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Emergency Tents</div>
+              <div class="resource-details">50 units • Shelter Depot • No expiry</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-high"></span>
+              High Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Blankets</div>
+              <div class="resource-details">300 units • Shelter Depot • No expiry</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-high"></span>
+              High Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Water Containers</div>
+              <div class="resource-details">100 units • Water Depot • No expiry</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-medium"></span>
+              Medium Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Transportation -->
+      <div class="resource-category">
+        <div class="category-header">
+          <div class="category-icon">🚚</div>
+          <h3 class="category-title">Transportation</h3>
+        </div>
+        <ul class="resource-list">
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Ambulances</div>
+              <div class="resource-details">8 vehicles • Vehicle Depot • Operational</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-medium"></span>
+              Medium Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Rescue Trucks</div>
+              <div class="resource-details">5 vehicles • Vehicle Depot • Operational</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-low"></span>
+              Low Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Fuel (Diesel)</div>
+              <div class="resource-details">2000 liters • Fuel Depot • No expiry</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-high"></span>
+              High Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Communication -->
+      <div class="resource-category">
+        <div class="category-header">
+          <div class="category-icon">📻</div>
+          <h3 class="category-title">Communication</h3>
+        </div>
+        <ul class="resource-list">
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Emergency Radios</div>
+              <div class="resource-details">45 units • Comm Center • No expiry</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-medium"></span>
+              Medium Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Satellite Phones</div>
+              <div class="resource-details">12 units • Comm Center • No expiry</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-low"></span>
+              Low Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Megaphones</div>
+              <div class="resource-details">20 units • Comm Center • No expiry</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-high"></span>
+              High Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Food & Water -->
+      <div class="resource-category">
+        <div class="category-header">
+          <div class="category-icon">🍽️</div>
+          <h3 class="category-title">Food & Water</h3>
+        </div>
+        <ul class="resource-list">
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Non-perishable Food</div>
+              <div class="resource-details">500 meals • Food Depot • Expires: 2025-08</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-high"></span>
+              High Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Water Purification Tablets</div>
+              <div class="resource-details">1000 tablets • Water Depot • Expires: 2026-03</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-high"></span>
+              High Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+          <li class="resource-item">
+            <div class="resource-info">
+              <div class="resource-name">Energy Bars</div>
+              <div class="resource-details">200 units • Food Depot • Expires: 2024-12</div>
+            </div>
+            <div class="resource-status">
+              <span class="status-indicator status-low"></span>
+              Low Stock
+            </div>
+            <div class="resource-actions">
+              <button class="btn-edit" onclick="editResource(this.parentElement.parentElement)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteResource(this.parentElement.parentElement)">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
+
+  <script>
+    // Display the username from sessionStorage
+    document.addEventListener('DOMContentLoaded', function() {
+      const username = sessionStorage.getItem('username') || 'Admin';
+      document.getElementById('user-role').textContent = username;
+    });
+
+    // Add Resource Form Toggle
+    document.getElementById('add-resource-btn').addEventListener('click', function() {
+      const form = document.getElementById('add-resource-form');
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.getElementById('cancel-resource-btn').addEventListener('click', function() {
+      document.getElementById('add-resource-form').style.display = 'none';
+    });
+
+    // Save Resource
+    document.getElementById('save-resource-btn').addEventListener('click', function() {
+      // Get form values
+      const name = document.getElementById('resource-name').value;
+      const category = document.getElementById('resource-category').value;
+      const quantity = document.getElementById('resource-quantity').value;
+      const unit = document.getElementById('resource-unit').value;
+      const location = document.getElementById('resource-location').value;
+      const status = document.getElementById('resource-status').value;
+      const description = document.getElementById('resource-description').value;
+      const expiry = document.getElementById('resource-expiry').value;
+
+      if (!name || !category || !quantity || !unit || !location) {
+        alert('Please fill in all required fields!');
+        return;
+      }
+
+      // Here you would typically save to a database
+      alert('Resource saved successfully!');
+      
+      // Clear form and hide it
+      document.getElementById('add-resource-form').reset();
+      document.getElementById('add-resource-form').style.display = 'none';
+    });
+
+    // Search and Filter Functionality
+    document.getElementById('search-input').addEventListener('input', function() {
+      filterResources();
+    });
+
+    document.getElementById('category-filter').addEventListener('change', function() {
+      filterResources();
+    });
+
+    document.getElementById('status-filter').addEventListener('change', function() {
+      filterResources();
+    });
+
+    document.getElementById('location-filter').addEventListener('input', function() {
+      filterResources();
+    });
+
+    function filterResources() {
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      const categoryFilter = document.getElementById('category-filter').value;
+      const statusFilter = document.getElementById('status-filter').value;
+      const locationFilter = document.getElementById('location-filter').value.toLowerCase();
+
+      const resourceItems = document.querySelectorAll('.resource-item');
+      
+      resourceItems.forEach(item => {
+        const name = item.querySelector('.resource-name').textContent.toLowerCase();
+        const details = item.querySelector('.resource-details').textContent.toLowerCase();
+        const status = item.querySelector('.resource-status').textContent.toLowerCase();
+        
+        const matchesSearch = name.includes(searchTerm) || details.includes(searchTerm);
+        const matchesCategory = !categoryFilter || details.includes(categoryFilter);
+        const matchesStatus = !statusFilter || status.includes(statusFilter);
+        const matchesLocation = !locationFilter || details.includes(locationFilter);
+        
+        if (matchesSearch && matchesCategory && matchesStatus && matchesLocation) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    // Export functionality
+    document.getElementById('export-btn').addEventListener('click', function() {
+      alert('Exporting resource inventory...\nThis would generate a CSV/Excel file with all resource data.');
+    });
+
+    // Refresh functionality
+    document.getElementById('refresh-btn').addEventListener('click', function() {
+      location.reload();
+    });
+
+    // Edit Resource Function
+    function editResource(resourceItem) {
+      // Get resource data from data attributes
+      const resourceId = resourceItem.getAttribute('data-resource-id');
+      const resourceName = resourceItem.getAttribute('data-resource-name');
+      const resourceCategory = resourceItem.getAttribute('data-resource-category');
+      const resourceQuantity = resourceItem.getAttribute('data-resource-quantity');
+      const resourceUnit = resourceItem.getAttribute('data-resource-unit');
+      const resourceLocation = resourceItem.getAttribute('data-resource-location');
+      const resourceStatus = resourceItem.getAttribute('data-resource-status');
+      const resourceDescription = resourceItem.getAttribute('data-resource-description');
+      const resourceExpiry = resourceItem.getAttribute('data-resource-expiry');
+
+      // Populate edit form
+      document.getElementById('edit-resource-name').value = resourceName;
+      document.getElementById('edit-resource-category').value = resourceCategory;
+      document.getElementById('edit-resource-quantity').value = resourceQuantity;
+      document.getElementById('edit-resource-unit').value = resourceUnit;
+      document.getElementById('edit-resource-location').value = resourceLocation;
+      document.getElementById('edit-resource-status').value = resourceStatus;
+      document.getElementById('edit-resource-description').value = resourceDescription;
+      
+      if (resourceExpiry && resourceExpiry !== 'null') {
+        document.getElementById('edit-resource-expiry').value = resourceExpiry;
+      } else {
+        document.getElementById('edit-resource-expiry').value = '';
+      }
+
+      // Store the resource ID being edited
+      document.getElementById('edit-resource-form').setAttribute('data-editing-id', resourceId);
+
+      // Hide add form and show edit form
+      document.getElementById('add-resource-form').style.display = 'none';
+      document.getElementById('edit-resource-form').style.display = 'block';
+
+      // Scroll to edit form
+      document.getElementById('edit-resource-form').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Delete Resource Function
+    function deleteResource(resourceItem) {
+      const resourceName = resourceItem.getAttribute('data-resource-name');
+      
+      if (confirm(`Are you sure you want to delete "${resourceName}"? This action cannot be undone.`)) {
+        // Here you would typically make an API call to delete the resource
+        // For now, we'll just remove it from the DOM
+        resourceItem.remove();
+        
+        // Update statistics
+        updateStatistics();
+        
+        alert(`Resource "${resourceName}" has been deleted successfully.`);
+      }
+    }
+
+    // Update Resource Function
+    document.getElementById('update-resource-btn').addEventListener('click', function() {
+      const editingId = document.getElementById('edit-resource-form').getAttribute('data-editing-id');
+      
+      // Get form values
+      const name = document.getElementById('edit-resource-name').value;
+      const category = document.getElementById('edit-resource-category').value;
+      const quantity = document.getElementById('edit-resource-quantity').value;
+      const unit = document.getElementById('edit-resource-unit').value;
+      const location = document.getElementById('edit-resource-location').value;
+      const status = document.getElementById('edit-resource-status').value;
+      const description = document.getElementById('edit-resource-description').value;
+      const expiry = document.getElementById('edit-resource-expiry').value;
+
+      if (!name || !category || !quantity || !unit || !location) {
+        alert('Please fill in all required fields!');
+        return;
+      }
+
+      // Find the resource item being edited
+      const resourceItem = document.querySelector(`[data-resource-id="${editingId}"]`);
+      if (resourceItem) {
+        // Update the resource item with new values
+        resourceItem.setAttribute('data-resource-name', name);
+        resourceItem.setAttribute('data-resource-category', category);
+        resourceItem.setAttribute('data-resource-quantity', quantity);
+        resourceItem.setAttribute('data-resource-unit', unit);
+        resourceItem.setAttribute('data-resource-location', location);
+        resourceItem.setAttribute('data-resource-status', status);
+        resourceItem.setAttribute('data-resource-description', description);
+        resourceItem.setAttribute('data-resource-expiry', expiry);
+
+        // Update the displayed information
+        resourceItem.querySelector('.resource-name').textContent = name;
+        resourceItem.querySelector('.resource-details').textContent = 
+          `${quantity} ${unit} • ${location} • ${expiry ? 'Expires: ' + expiry : 'No expiry'}`;
+
+        // Update status indicator
+        const statusIndicator = resourceItem.querySelector('.status-indicator');
+        const statusText = resourceItem.querySelector('.resource-status');
+        
+        // Remove old status classes
+        statusIndicator.classList.remove('status-high', 'status-medium', 'status-low', 'status-out');
+        // Add new status class
+        statusIndicator.classList.add(`status-${status}`);
+        
+        // Update status text
+        statusText.innerHTML = `
+          <span class="status-indicator status-${status}"></span>
+          ${status.charAt(0).toUpperCase() + status.slice(1)} Stock
+        `;
+      }
+
+      // Here you would typically make an API call to update the resource
+      alert('Resource updated successfully!');
+      
+      // Hide edit form
+      document.getElementById('edit-resource-form').style.display = 'none';
+    });
+
+    // Cancel Edit
+    document.getElementById('cancel-edit-btn').addEventListener('click', function() {
+      document.getElementById('edit-resource-form').style.display = 'none';
+    });
+
+    // Update Statistics Function
+    function updateStatistics() {
+      const totalResources = document.querySelectorAll('.resource-item').length;
+      const lowStockItems = document.querySelectorAll('.status-indicator.status-low').length;
+      const outOfStockItems = document.querySelectorAll('.status-indicator.status-out').length;
+      
+      // Update the statistics display
+      document.querySelector('.stat-card:nth-child(1) .stat-number').textContent = totalResources;
+      document.querySelector('.stat-card:nth-child(2) .stat-number').textContent = lowStockItems;
+      document.querySelector('.stat-card:nth-child(3) .stat-number').textContent = outOfStockItems;
+    }
+  </script>
 </body>
 </html>

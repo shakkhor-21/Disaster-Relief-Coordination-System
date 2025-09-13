@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Disaster Monitoring</title>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     * { box-sizing: border-box; }
     body {
@@ -37,6 +38,7 @@
     .page-container {
       padding: 2rem;
       max-width: 1000px;
+      margin: auto;
     }
     h2 {
       color: #b91c1c;
@@ -49,6 +51,12 @@
       color: #374151;
       line-height: 1.6;
     }
+    #map {
+      height: 500px;
+      border: 2px solid #fca5a5;
+      border-radius: 12px;
+      margin-top: 2rem;
+    }
   </style>
 </head>
 <body>
@@ -60,6 +68,34 @@
   <div class="page-container">
     <h2>Real-Time Disaster Monitoring</h2>
     <p>This section provides a live overview of disasters using map data, satellite inputs, and field sensors. Stay updated with the latest alerts and impact zones, enabling fast and informed decisions.</p>
+
+    <div id="map"></div>
   </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Initialize map
+    var map = L.map('map').setView([23.8103, 90.4125], 6); // Dhaka center
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Mock disaster data
+    const disasters = [
+      { lat: 23.8103, lon: 90.4125, type: "Flood", severity: "High" },
+      { lat: 22.3569, lon: 91.7832, type: "Cyclone", severity: "Moderate" },
+      { lat: 24.3636, lon: 88.6241, type: "Earthquake", severity: "Low" }
+    ];
+
+    // Add markers
+    disasters.forEach(d => {
+      L.marker([d.lat, d.lon])
+        .addTo(map)
+        .bindPopup(`<b>${d.type}</b><br>Severity: ${d.severity}`)
+        .openPopup();
+    });
+  </script>
 </body>
 </html>

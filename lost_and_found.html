@@ -36,7 +36,8 @@
     }
     .page-container {
       padding: 2rem;
-      max-width: 1000px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     h2 {
       color: #b91c1c;
@@ -44,10 +45,68 @@
       font-family: 'Orbitron', sans-serif;
       margin-bottom: 1rem;
     }
-    p {
-      font-size: 1.05rem;
-      color: #374151;
-      line-height: 1.6;
+    .section {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .table-container {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    th {
+      background-color: #fef2f2;
+      color: #b91c1c;
+      font-weight: 600;
+    }
+    tr:hover {
+      background-color: #fef2f2;
+    }
+    .status-lost {
+      background-color: #fef3c7;
+      color: #92400e;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .status-found {
+      background-color: #d1fae5;
+      color: #065f46;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .no-items {
+      text-align: center;
+      color: #6b7280;
+      font-style: italic;
+      padding: 2rem;
+    }
+    .refresh-btn {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    .refresh-btn:hover {
+      background-color: #dc2626;
     }
   </style>
 </head>
@@ -58,8 +117,121 @@
   </header>
 
   <div class="page-container">
-    <h2>Lost & Found</h2>
-    <p>Keep track of missing persons and recovered items. Facilitate reconnections by logging reports and sightings from volunteers and responders in the field.</p>
+    <h2>Lost & Found Management</h2>
+    
+    <div class="section">
+      <h3>Lost Items</h3>
+      <button class="refresh-btn" onclick="loadLostFoundItems()">Refresh Data</button>
+      <div class="table-container">
+        <table id="lost-items-table">
+          <thead>
+            <tr>
+              <th>Item Name</th>
+              <th>Description</th>
+              <th>Location</th>
+              <th>Contact Info</th>
+              <th>Date Reported</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="lost-items-body">
+            <tr>
+              <td colspan="6" class="no-items">Loading lost items...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Found Items</h3>
+      <div class="table-container">
+        <table id="found-items-table">
+          <thead>
+            <tr>
+              <th>Item Name</th>
+              <th>Description</th>
+              <th>Location Found</th>
+              <th>Found By</th>
+              <th>Date Found</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="found-items-body">
+            <tr>
+              <td colspan="6" class="no-items">Loading found items...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
+
+  <script>
+    // Display username from session storage
+    document.addEventListener('DOMContentLoaded', function() {
+      const username = sessionStorage.getItem('username');
+      if (username) {
+        document.getElementById('user-role').textContent = username;
+      }
+      
+      // Load lost and found items
+      loadLostFoundItems();
+    });
+
+    function loadLostFoundItems() {
+      fetch('http://localhost:3000/lost_found_items')
+        .then(response => response.json())
+        .then(data => {
+          displayLostItems(data.filter(item => item.type === 'lost'));
+          displayFoundItems(data.filter(item => item.type === 'found'));
+        })
+        .catch(error => {
+          console.error('Error loading lost and found items:', error);
+          document.getElementById('lost-items-body').innerHTML = '<tr><td colspan="6" class="no-items">Error loading data. Please try again.</td></tr>';
+          document.getElementById('found-items-body').innerHTML = '<tr><td colspan="6" class="no-items">Error loading data. Please try again.</td></tr>';
+        });
+    }
+
+    function displayLostItems(lostItems) {
+      const tbody = document.getElementById('lost-items-body');
+      
+      if (lostItems.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="no-items">No lost items reported yet.</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = lostItems.map(item => `
+        <tr>
+          <td>${item.itemName}</td>
+          <td>${item.description}</td>
+          <td>${item.location}</td>
+          <td>${item.contactInfo}</td>
+          <td>${new Date(item.timestamp).toLocaleString()}</td>
+          <td><span class="status-lost">${item.status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function displayFoundItems(foundItems) {
+      const tbody = document.getElementById('found-items-body');
+      
+      if (foundItems.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="no-items">No found items reported yet.</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = foundItems.map(item => `
+        <tr>
+          <td>${item.itemName}</td>
+          <td>${item.description}</td>
+          <td>${item.location}</td>
+          <td>${item.foundBy}</td>
+          <td>${new Date(item.timestamp).toLocaleString()}</td>
+          <td><span class="status-found">${item.status}</span></td>
+        </tr>
+      `).join('');
+    }
+  </script>
 </body>
 </html>

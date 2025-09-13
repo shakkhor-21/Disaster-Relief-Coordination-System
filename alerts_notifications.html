@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Alerts & Notifications</title>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; }
     body {
@@ -36,7 +37,8 @@
     }
     .page-container {
       padding: 2rem;
-      max-width: 1000px;
+      max-width: 1400px;
+      margin: 0 auto;
     }
     h2 {
       color: #b91c1c;
@@ -44,10 +46,313 @@
       font-family: 'Orbitron', sans-serif;
       margin-bottom: 1rem;
     }
+    h3 {
+      color: #991b1b;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
     p {
       font-size: 1.05rem;
       color: #374151;
       line-height: 1.6;
+    }
+    
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .alert-composer, .templates-section, .analytics-section, .integration-section {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #374151;
+    }
+    
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+    
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    }
+    
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .urgency-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    
+    .urgency-btn {
+      padding: 0.8rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      text-align: center;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .urgency-btn.critical {
+      border-color: #dc2626;
+      color: #dc2626;
+    }
+    
+    .urgency-btn.high {
+      border-color: #ea580c;
+      color: #ea580c;
+    }
+    
+    .urgency-btn.medium {
+      border-color: #d97706;
+      color: #d97706;
+    }
+    
+    .urgency-btn.low {
+      border-color: #059669;
+      color: #059669;
+    }
+    
+    .urgency-btn.active {
+      background: currentColor;
+      color: white;
+    }
+    
+    .btn-primary {
+      background: #ef4444;
+      color: white;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: #6b7280;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-right: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
+    
+    .template-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .template-item:hover {
+      border-color: #ef4444;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.1);
+    }
+    
+    .template-title {
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+    
+    .template-preview {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+    
+    .alert-history {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .alert-item {
+      border-left: 4px solid #e5e7eb;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #f9fafb;
+      border-radius: 0 8px 8px 0;
+    }
+    
+    .alert-item.critical {
+      border-left-color: #dc2626;
+    }
+    
+    .alert-item.high {
+      border-left-color: #ea580c;
+    }
+    
+    .alert-item.medium {
+      border-left-color: #d97706;
+    }
+    
+    .alert-item.low {
+      border-left-color: #059669;
+    }
+    
+    .alert-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .alert-timestamp {
+      color: #6b7280;
+      font-size: 0.85rem;
+    }
+    
+    .alert-status {
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .status-sent {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ef4444;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+    
+    .integration-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    .integration-info {
+      display: flex;
+      align-items: center;
+    }
+    
+    .integration-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .weather-icon {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .volunteer-icon {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 25px;
+      background: #e5e7eb;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .toggle-switch.active {
+      background: #ef4444;
+    }
+    
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 21px;
+      height: 21px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: all 0.3s ease;
+    }
+    
+    .toggle-switch.active::after {
+      left: 27px;
     }
   </style>
 </head>
@@ -60,6 +365,318 @@
   <div class="page-container">
     <h2>Alerts & Notifications</h2>
     <p>Send critical alerts to responders and civilians. Customize message urgency, delivery methods, and recipient groups.</p>
+    
+    <!-- Statistics Dashboard -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="total-alerts">0</div>
+        <div class="stat-label">Total Alerts Sent</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="active-alerts">0</div>
+        <div class="stat-label">Active Alerts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="delivery-rate">0%</div>
+        <div class="stat-label">Delivery Rate</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="response-time">0s</div>
+        <div class="stat-label">Avg Response Time</div>
+      </div>
+    </div>
+    
+    <div class="dashboard-grid">
+      <!-- Alert Composer -->
+      <div class="alert-composer">
+        <h3><i class="fas fa-bullhorn"></i> Create Alert</h3>
+        <form id="alert-form">
+          <div class="form-group">
+            <label for="alert-type">Alert Type</label>
+            <select id="alert-type" required>
+              <option value="">Select Alert Type</option>
+              <option value="weather">Weather Warning</option>
+              <option value="evacuation">Evacuation Order</option>
+              <option value="safety">Safety Update</option>
+              <option value="resource">Resource Availability</option>
+              <option value="medical">Medical Emergency</option>
+              <option value="general">General Information</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="alert-title">Alert Title</label>
+            <input type="text" id="alert-title" placeholder="Enter alert title" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="alert-message">Message</label>
+            <textarea id="alert-message" placeholder="Enter detailed alert message" required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Urgency Level</label>
+            <div class="urgency-selector">
+              <div class="urgency-btn critical" data-urgency="critical">
+                <i class="fas fa-exclamation-triangle"></i><br>Critical
+              </div>
+              <div class="urgency-btn high" data-urgency="high">
+                <i class="fas fa-exclamation"></i><br>High
+              </div>
+              <div class="urgency-btn medium" data-urgency="medium">
+                <i class="fas fa-info-circle"></i><br>Medium
+              </div>
+              <div class="urgency-btn low" data-urgency="low">
+                <i class="fas fa-check-circle"></i><br>Low
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="target-area">Target Area</label>
+            <select id="target-area" required>
+              <option value="">Select Target Area</option>
+              <option value="all">All Areas</option>
+              <option value="central">Central District</option>
+              <option value="east">East District</option>
+              <option value="west">West District</option>
+              <option value="north">North District</option>
+              <option value="south">South District</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="recipient-group">Recipient Group</label>
+            <select id="recipient-group" required>
+              <option value="">Select Recipients</option>
+              <option value="all">All Users</option>
+              <option value="volunteers">Volunteers Only</option>
+              <option value="civilians">Civilians Only</option>
+              <option value="responders">Emergency Responders</option>
+              <option value="officials">Government Officials</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="schedule-time">Schedule (Optional)</label>
+            <input type="datetime-local" id="schedule-time">
+          </div>
+          
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-paper-plane"></i> Send Alert
+          </button>
+        </form>
+      </div>
+      
+      <!-- Sidebar -->
+      <div>
+        <!-- Alert Templates -->
+        <div class="templates-section">
+          <h3><i class="fas fa-file-alt"></i> Quick Templates</h3>
+          <div id="template-list">
+            <!-- Templates will be populated here -->
+          </div>
+          <button class="btn-secondary" onclick="showAllTemplates()">
+            <i class="fas fa-list"></i> View All Templates
+          </button>
+        </div>
+        
+      </div>
+    </div>
+    
+    <!-- Alert History -->
+    <div class="analytics-section">
+      <h3><i class="fas fa-history"></i> Recent Alerts</h3>
+      <div class="alert-history" id="alert-history">
+        <!-- Alert history will be populated here -->
+      </div>
+    </div>
   </div>
+  
+  <script>
+    // Alert data storage
+    let alerts = JSON.parse(localStorage.getItem('alerts') || '[]');
+    let selectedUrgency = 'medium';
+    let integrations = {
+      weather: true,
+      volunteers: true
+    };
+    
+    // Alert templates
+    const templates = [
+      {
+        id: 1,
+        title: 'Severe Weather Warning',
+        type: 'weather',
+        message: 'SEVERE WEATHER ALERT: Heavy rainfall and strong winds expected. Seek shelter immediately and avoid outdoor activities.',
+        urgency: 'critical'
+      },
+      {
+        id: 2,
+        title: 'Evacuation Notice',
+        type: 'evacuation',
+        message: 'EVACUATION ORDER: Residents in [AREA] must evacuate immediately. Proceed to designated evacuation centers.',
+        urgency: 'critical'
+      },
+      {
+        id: 3,
+        title: 'Resource Distribution',
+        type: 'resource',
+        message: 'Food and water distribution available at [LOCATION] from [TIME]. Please bring identification.',
+        urgency: 'medium'
+      },
+      {
+        id: 4,
+        title: 'Safety All-Clear',
+        type: 'safety',
+        message: 'ALL CLEAR: The immediate danger has passed. Normal activities may resume with caution.',
+        urgency: 'low'
+      }
+    ];
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      loadTemplates();
+      loadAlertHistory();
+      updateStatistics();
+      setupUrgencySelector();
+      setupFormSubmission();
+    });
+    
+    // Setup urgency selector
+    function setupUrgencySelector() {
+      const urgencyBtns = document.querySelectorAll('.urgency-btn');
+      urgencyBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          urgencyBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          selectedUrgency = this.dataset.urgency;
+        });
+      });
+      
+      // Set default selection
+      document.querySelector('[data-urgency="medium"]').classList.add('active');
+    }
+    
+    // Setup form submission
+    function setupFormSubmission() {
+      document.getElementById('alert-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        sendAlert();
+      });
+    }
+    
+    // Load templates
+    function loadTemplates() {
+      const templateList = document.getElementById('template-list');
+      templateList.innerHTML = '';
+      
+      templates.slice(0, 3).forEach(template => {
+        const templateDiv = document.createElement('div');
+        templateDiv.className = 'template-item';
+        templateDiv.innerHTML = `
+          <div class="template-title">${template.title}</div>
+          <div class="template-preview">${template.message.substring(0, 80)}...</div>
+        `;
+        templateDiv.onclick = () => useTemplate(template);
+        templateList.appendChild(templateDiv);
+      });
+    }
+    
+    // Use template
+    function useTemplate(template) {
+      document.getElementById('alert-type').value = template.type;
+      document.getElementById('alert-title').value = template.title;
+      document.getElementById('alert-message').value = template.message;
+      
+      // Set urgency
+      document.querySelectorAll('.urgency-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.urgency === template.urgency) {
+          btn.classList.add('active');
+          selectedUrgency = template.urgency;
+        }
+      });
+    }
+    
+    // Send alert
+    function sendAlert() {
+      const alertData = {
+        id: Date.now(),
+        type: document.getElementById('alert-type').value,
+        title: document.getElementById('alert-title').value,
+        message: document.getElementById('alert-message').value,
+        urgency: selectedUrgency,
+        targetArea: document.getElementById('target-area').value,
+        recipientGroup: document.getElementById('recipient-group').value,
+        scheduleTime: document.getElementById('schedule-time').value,
+        timestamp: new Date().toISOString(),
+        status: 'sent',
+        deliveryRate: Math.floor(Math.random() * 20) + 80, // Simulate 80-100% delivery
+        responseTime: Math.floor(Math.random() * 30) + 5 // Simulate 5-35 seconds
+      };
+      
+      alerts.unshift(alertData);
+      localStorage.setItem('alerts', JSON.stringify(alerts));
+      
+      // Reset form
+      document.getElementById('alert-form').reset();
+      document.querySelectorAll('.urgency-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector('[data-urgency="medium"]').classList.add('active');
+      selectedUrgency = 'medium';
+      
+      // Update displays
+      loadAlertHistory();
+      updateStatistics();
+      
+      // Alert sent - no popup needed
+    }
+    
+    // Load alert history
+    function loadAlertHistory() {
+      const historyContainer = document.getElementById('alert-history');
+      historyContainer.innerHTML = '';
+      
+      alerts.slice(0, 10).forEach(alert => {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert-item ${alert.urgency}`;
+        alertDiv.innerHTML = `
+          <div class="alert-meta">
+            <strong>${alert.title}</strong>
+            <div>
+              <span class="alert-status status-${alert.status}">${alert.status.toUpperCase()}</span>
+              <span class="alert-timestamp">${new Date(alert.timestamp).toLocaleString()}</span>
+            </div>
+          </div>
+          <div>${alert.message}</div>
+          <div style="margin-top: 0.5rem; font-size: 0.85rem; color: #6b7280;">
+            Target: ${alert.targetArea} | Recipients: ${alert.recipientGroup} | Delivery: ${alert.deliveryRate}%
+          </div>
+        `;
+        historyContainer.appendChild(alertDiv);
+      });
+    }
+    
+    // Update statistics
+    function updateStatistics() {
+      const totalAlerts = alerts.length;
+      const activeAlerts = alerts.filter(a => a.status === 'sent').length;
+      const avgDeliveryRate = alerts.length > 0 ? 
+        Math.round(alerts.reduce((sum, a) => sum + a.deliveryRate, 0) / alerts.length) : 0;
+      const avgResponseTime = alerts.length > 0 ? 
+        Math.round(alerts.reduce((sum, a) => sum + a.responseTime, 0) / alerts.length) : 0;
+      
+      document.getElementById('total-alerts').textContent = totalAlerts;
+      document.getElementById('active-alerts').textContent = activeAlerts;
+      document.getElementById('delivery-rate').textContent = avgDeliveryRate + '%';
+      document.getElementById('response-time').textContent = avgResponseTime + 's';
+    }
+    
+    
+    // Show all templates (placeholder)
+    function showAllTemplates() {
+      alert('Template library feature - to be implemented');
+    }
+  </script>
 </body>
 </html>

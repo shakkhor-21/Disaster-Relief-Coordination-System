@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Aid Tracking</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Aid Tracking Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
@@ -36,30 +37,107 @@
     }
     .page-container {
       padding: 2rem;
-      max-width: 1000px;
+      max-width: 1100px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(239, 68, 68, 0.10);
     }
-    h2 {
-      color: #b91c1c;
-      font-size: 1.6rem;
-      font-family: 'Orbitron', sans-serif;
-      margin-bottom: 1rem;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.08);
     }
-    p {
+    th, td {
+      padding: 1rem 0.7rem;
+      text-align: left;
+      border-bottom: 1px solid #fca5a5;
       font-size: 1.05rem;
-      color: #374151;
-      line-height: 1.6;
+    }
+    th {
+      background-color: #ef4444;
+      color: white;
+      font-weight: 600;
+      border: none;
+      letter-spacing: 0.5px;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover {
+      background-color: #fee2e2;
+    }
+    .desc-cell {
+      color: #4b5563;
+      font-style: italic;
+      max-width: 300px;
+      word-break: break-word;
+    }
+    #aidList p {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #64748b;
     }
   </style>
 </head>
 <body>
   <header>
     <h1>Admin Portal</h1>
-    <div id="user-role">ADMIN</div>
+    <div id="user-role">Loading...</div>
   </header>
-
   <div class="page-container">
-    <h2>Aid Tracking</h2>
-    <p>Track the distribution of aid packages and relief supplies. Monitor delivery status, recipient confirmation, and quantity logs.</p>
+    <h2 style="color:#b91c1c;font-family:'Orbitron',sans-serif;">Aid Requests Tracking Dashboard</h2>
+    <div id="aidList">
+      <p>Loading aid requests...</p>
+    </div>
   </div>
+  <script>
+    // Display the username from sessionStorage
+    document.addEventListener('DOMContentLoaded', function() {
+      const username = sessionStorage.getItem('username') || 'Admin';
+      document.getElementById('user-role').textContent = username;
+    });
+
+    fetch('http://localhost:3000/aid_requests')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('aidList');
+        container.innerHTML = '';
+        if (!data || data.length === 0) {
+          container.innerHTML = '<p>No aid requests found.</p>';
+          return;
+        }
+        const table = document.createElement('table');
+        table.innerHTML = `
+          <tr>
+            <th>Request ID</th>
+            <th>Resource Type</th>
+            <th>Quantity</th>
+            <th>Location</th>
+            <th>Submitted At</th>
+          </tr>
+        `;
+        data.forEach(req => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${req.request_id ? req.request_id : ''}</td>
+            <td>${req.resource_type}</td>
+            <td>${req.quantity ? req.quantity : ''}</td>
+            <td>${req.location}</td>
+            <td>${req.timestamp ? new Date(req.timestamp).toLocaleString() : ''}</td>
+          `;
+          table.appendChild(row);
+        });
+        container.appendChild(table);
+      })
+      .catch(error => {
+        const container = document.getElementById('aidList');
+        container.innerHTML = `<p>Error loading aid requests: ${error.message}</p>`;
+        console.error('Fetch error:', error);
+      });
+  </script>
 </body>
 </html>
