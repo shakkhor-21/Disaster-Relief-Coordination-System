@@ -50,12 +50,48 @@
   <header>Request Aid</header>
   <section>
     <h2>Submit a Help Request</h2>
-    <form>
-      <input type="text" placeholder="Type of Aid (e.g., Food, Shelter)" required />
-      <input type="text" placeholder="Your Location" required />
-      <textarea rows="4" placeholder="Additional Details" required></textarea>
+    <div style="margin-bottom:1.2rem;display:flex;align-items:center;gap:1rem;">
+      <label for="request_id" style="font-weight:bold;">Request ID:</label>
+      <input type="text" id="request_id" name="request_id" readonly style="width:120px;font-weight:bold;text-align:center;background:#f3f4f6;border:1px solid #a7f3d0;" />
+      <button type="button" id="copyRequestIdBtn" style="padding:0.1rem 0.5rem;font-size:0.92rem;width:auto;min-width:unset;background:#10b981;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">Copy this</button>
+    </div>
+    <form id="aidRequestForm">
+      <input type="text" name="resource_type" placeholder="Type of Aid (e.g., Food, Shelter)" required />
+      <input type="number" name="quantity" placeholder="Quantity" min="1" required />
+      <input type="text" name="location" placeholder="Your Location" required />
       <button type="submit">Send Request</button>
     </form>
   </section>
+<script>
+// Generate a 6-digit request ID
+function generateRequestId() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+const requestId = generateRequestId();
+document.getElementById('request_id').value = requestId;
+document.getElementById('copyRequestIdBtn').onclick = function() {
+  navigator.clipboard.writeText(requestId);
+  this.textContent = 'Copied!';
+  setTimeout(() => { this.textContent = 'Copy this'; }, 1200);
+};
+document.getElementById('aidRequestForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const resource_type = this.resource_type.value;
+  const quantity = this.quantity.value;
+  const location = this.location.value;
+  // Send the request_id with the request
+  const response = await fetch('http://localhost:3000/submit_resource', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ request_id: requestId, resource_type, quantity, location })
+  });
+  if (response.ok) {
+    window.location.href = 'request_successful.html';
+    this.reset();
+  } else {
+    alert('Failed to submit aid request.');
+  }
+});
+</script>
 </body>
 </html>

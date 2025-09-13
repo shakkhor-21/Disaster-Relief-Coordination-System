@@ -35,6 +35,7 @@
       padding: 0.8rem;
       border-radius: 10px;
       border: 1px solid #d1fae5;
+      font-size: 1rem;
     }
     button {
       background-color: #10b981;
@@ -42,24 +43,154 @@
       font-weight: bold;
       border: none;
       cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #059669;
+    }
+    .back-button {
+      background-color: #6b7280;
+      margin-top: 1rem;
+    }
+    .back-button:hover {
+      background-color: #4b5563;
+    }
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    .success-message {
+      background-color: #d1fae5;
+      border: 2px solid #10b981;
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      margin: 2rem 0;
+      display: none;
+    }
+    .success-message h3 {
+      color: #065f46;
+      margin-bottom: 1rem;
+    }
+    .success-message p {
+      color: #047857;
+      margin-bottom: 1.5rem;
+    }
+    .success-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .success-buttons button {
+      width: auto;
+      padding: 0.8rem 1.5rem;
     }
   </style>
 </head>
 <body>
   <header>Donate</header>
-  <section>
+  
+  <!-- Donation Form -->
+  <section id="donationFormSection">
     <h2>Contribute to Relief Efforts</h2>
-    <form>
-      <input type="text" placeholder="Full Name" required />
-      <input type="number" placeholder="Amount (BDT)" required />
-      <select>
-        <option>Select Purpose</option>
-        <option>Food & Water</option>
-        <option>Shelter</option>
-        <option>Medical Aid</option>
+    <form id="donationForm">
+      <input type="text" id="fullName" placeholder="Full Name" required />
+      <input type="number" id="amount" placeholder="Amount (BDT)" required min="1" />
+      <select id="purpose" required>
+        <option value="">Select Purpose</option>
+        <option value="Food & Water">Food & Water</option>
+        <option value="Shelter">Shelter</option>
+        <option value="Medical Aid">Medical Aid</option>
+        <option value="Emergency Relief">Emergency Relief</option>
+        <option value="Infrastructure">Infrastructure</option>
       </select>
-      <button type="submit">Donate Now</button>
+      <button type="submit" id="submitBtn">Donate Now</button>
+      <button type="button" class="back-button" onclick="goBack()">Back to Dashboard</button>
     </form>
   </section>
+
+  <!-- Success Message -->
+  <section id="successMessage" class="success-message">
+    <h3>🎉 Donation Successful!</h3>
+    <p>Thank you for your generous contribution to the relief efforts. Your donation will help make a difference in people's lives.</p>
+    <div class="success-buttons">
+      <button onclick="resetForm()">Make Another Donation</button>
+      <button onclick="goBack()" class="back-button">Back to Dashboard</button>
+    </div>
+  </section>
+
+  <script>
+    document.getElementById('donationForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const form = document.getElementById('donationForm');
+      const formSection = document.getElementById('donationFormSection');
+      const successSection = document.getElementById('successMessage');
+      
+      // Get form data
+      const formData = {
+        fullName: document.getElementById('fullName').value.trim(),
+        amount: document.getElementById('amount').value,
+        purpose: document.getElementById('purpose').value,
+        timestamp: new Date().toISOString()
+      };
+      
+      // Validate form
+      if (!formData.fullName || !formData.amount || !formData.purpose) {
+        alert('Please fill in all fields');
+        return;
+      }
+      
+      // Show loading state
+      submitBtn.textContent = 'Processing...';
+      form.classList.add('loading');
+      
+      try {
+        // Send donation data to backend
+        const response = await fetch('http://localhost:3000/submit_donation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+        
+        if (response.ok) {
+          // Hide form and show success message
+          formSection.style.display = 'none';
+          successSection.style.display = 'block';
+        } else {
+          throw new Error('Failed to submit donation');
+        }
+        
+        // Reset form state
+        submitBtn.textContent = 'Donate Now';
+        form.classList.remove('loading');
+        
+      } catch (error) {
+        console.error('Error processing donation:', error);
+        alert('Error processing donation. Please try again.');
+        
+        // Reset form state
+        submitBtn.textContent = 'Donate Now';
+        form.classList.remove('loading');
+      }
+    });
+    
+    function resetForm() {
+      // Reset form fields
+      document.getElementById('donationForm').reset();
+      
+      // Show form and hide success message
+      document.getElementById('donationFormSection').style.display = 'block';
+      document.getElementById('successMessage').style.display = 'none';
+    }
+    
+    function goBack() {
+      window.location.href = '../General/user_dashboard.html';
+    }
+  </script>
 </body>
 </html>

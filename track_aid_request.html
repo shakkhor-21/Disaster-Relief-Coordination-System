@@ -37,15 +37,66 @@
       padding: 0.8rem;
       border: 1px solid #d1fae5;
       border-radius: 10px;
+      font-size: 1rem;
     }
     button {
-      padding: 0.8rem;
+      padding: 0.8rem 2rem;
       background-color: #10b981;
       color: white;
       border: none;
       font-weight: bold;
       border-radius: 10px;
       cursor: pointer;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    button:hover {
+      background-color: #059669;
+    }
+    .status-display {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .status-processing {
+      background-color: #dbeafe;
+      color: #1e40af;
+      border: 2px solid #93c5fd;
+    }
+    .status-not-found {
+      background-color: #fee2e2;
+      color: #dc2626;
+      border: 2px solid #fca5a5;
+    }
+    .status-loading {
+      background-color: #fef3c7;
+      color: #d97706;
+      border: 2px solid #fbbf24;
+    }
+    .back-button {
+      background-color: #6b7280;
+      margin-left: 1rem;
+    }
+    .back-button:hover {
+      background-color: #4b5563;
+    }
+    .request-details {
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    .request-details h4 {
+      margin: 0 0 0.5rem 0;
+      color: #374151;
+    }
+    .request-details p {
+      margin: 0.25rem 0;
+      color: #6b7280;
     }
   </style>
 </head>
@@ -53,10 +104,70 @@
   <header>Track Aid Request</header>
   <section>
     <h2>Check Your Aid Request Status</h2>
-    <form>
-      <input type="text" placeholder="Enter Request ID" required />
+    <form id="trackForm">
+      <input type="text" id="requestId" placeholder="Enter Request ID (6 digits)" required />
       <button type="submit">Track</button>
+      <button type="button" class="back-button" onclick="goBack()">Back to Dashboard</button>
     </form>
+    
+    <div id="statusDisplay" style="display: none;"></div>
   </section>
+
+  <script>
+    document.getElementById('trackForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const requestId = document.getElementById('requestId').value.trim();
+      const statusDisplay = document.getElementById('statusDisplay');
+      
+      if (!requestId) {
+        alert('Please enter a Request ID');
+        return;
+      }
+      
+      // Show loading status
+      statusDisplay.style.display = 'block';
+      statusDisplay.className = 'status-display status-loading';
+      statusDisplay.innerHTML = 'Checking request status...';
+      
+      try {
+        // Fetch all aid requests from the backend
+        const response = await fetch('http://localhost:3000/aid_requests');
+        const requests = await response.json();
+        
+        // Find the request with matching ID
+        const foundRequest = requests.find(req => req.request_id === requestId);
+        
+        if (foundRequest) {
+          // Request found - show "Processing" status
+          statusDisplay.className = 'status-display status-processing';
+          statusDisplay.innerHTML = `
+            <div>Status: <span style="color: #059669;">Processing</span></div>
+            <div class="request-details">
+              <h4>Request Details:</h4>
+              <p><strong>Request ID:</strong> ${foundRequest.request_id}</p>
+              <p><strong>Resource Type:</strong> ${foundRequest.resource_type}</p>
+              <p><strong>Quantity:</strong> ${foundRequest.quantity}</p>
+              <p><strong>Location:</strong> ${foundRequest.location}</p>
+              <p><strong>Submitted:</strong> ${new Date(foundRequest.timestamp).toLocaleString()}</p>
+            </div>
+          `;
+        } else {
+          // Request not found
+          statusDisplay.className = 'status-display status-not-found';
+          statusDisplay.innerHTML = 'Request ID not found. Please check your ID and try again.';
+        }
+        
+      } catch (error) {
+        console.error('Error tracking request:', error);
+        statusDisplay.className = 'status-display status-not-found';
+        statusDisplay.innerHTML = 'Error checking request status. Please try again.';
+      }
+    });
+    
+    function goBack() {
+      window.location.href = '../General/user_dashboard.html';
+    }
+  </script>
 </body>
 </html>

@@ -43,18 +43,95 @@
       border: none;
       cursor: pointer;
     }
+    button:hover {
+      background-color: #059669;
+    }
+    .success-message {
+      background-color: #d1fae5;
+      color: #065f46;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      text-align: center;
+      display: none;
+    }
+    .error-message {
+      background-color: #fee2e2;
+      color: #dc2626;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      text-align: center;
+      display: none;
+    }
+    .back-btn {
+      background-color: #6b7280;
+      margin-top: 1rem;
+    }
+    .back-btn:hover {
+      background-color: #4b5563;
+    }
   </style>
 </head>
 <body>
   <header>Found Something?</header>
   <section>
     <h2>Submit a Found Item</h2>
-    <form>
-      <input type="text" placeholder="Item Name" required />
-      <input type="text" placeholder="Where did you find it?" required />
-      <textarea rows="4" placeholder="Item Description"></textarea>
+    <form id="found-item-form">
+      <input type="text" name="itemName" placeholder="Item Name" required />
+      <input type="text" name="location" placeholder="Where did you find it?" required />
+      <textarea name="description" rows="4" placeholder="Item Description" required></textarea>
+      <input type="text" name="foundBy" placeholder="Your Name" required />
       <button type="submit">Submit Item</button>
     </form>
+    
+    <div id="success-message" class="success-message">
+      Found item submitted successfully! We'll help return it to its owner.
+    </div>
+    
+    <div id="error-message" class="error-message">
+      Error submitting found item. Please try again.
+    </div>
+    
+    <button class="back-btn" onclick="window.location.href='../General/user_dashboard.html'">Back to Dashboard</button>
   </section>
+
+  <script>
+    document.getElementById('found-item-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target);
+      const data = {
+        itemName: formData.get('itemName'),
+        description: formData.get('description'),
+        location: formData.get('location'),
+        foundBy: formData.get('foundBy'),
+        timestamp: new Date().toISOString()
+      };
+      
+      fetch('http://localhost:3000/submit_found_item', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.message) {
+          document.getElementById('success-message').style.display = 'block';
+          document.getElementById('error-message').style.display = 'none';
+          e.target.reset();
+        } else {
+          throw new Error('Submission failed');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('error-message').style.display = 'block';
+        document.getElementById('success-message').style.display = 'none';
+      });
+    });
+  </script>
 </body>
 </html>

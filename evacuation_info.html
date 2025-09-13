@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Evacuation Info</title>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -19,39 +21,638 @@
       padding: 1.2rem 2rem;
       font-family: 'Black Ops One', sans-serif;
       font-size: 1.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .location-info {
+      font-size: 0.9rem;
+      font-family: 'Segoe UI', sans-serif;
     }
     section {
       background: white;
       border: 2px solid #a7f3d0;
       border-radius: 20px;
       padding: 2rem;
-      max-width: 800px;
+      max-width: 1200px;
       margin: 2rem auto;
     }
-    ul {
-      padding-left: 1.2rem;
+    .map-container {
+      height: 400px;
+      border-radius: 15px;
+      overflow: hidden;
+      margin: 1rem 0;
+      border: 2px solid #a7f3d0;
     }
-    li {
-      margin-bottom: 0.8rem;
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+    .btn {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #059669;
+    }
+    .btn:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+    .location-status {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    .location-details {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .location-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.8rem;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 8px;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .location-icon {
+      font-size: 1.5rem;
+      min-width: 2rem;
+      text-align: center;
+    }
+    .location-item div {
+      flex: 1;
+    }
+    .location-item strong {
+      color: #92400e;
+      margin-right: 0.5rem;
+    }
+    .my-location-section {
+      margin: 2rem 0;
+    }
+    .my-location-section h3 {
+      color: #1e40af;
+      margin-bottom: 1rem;
+    }
+    .location-summary {
+      display: flex;
+      justify-content: center;
+    }
+    .location-card {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      border: 2px solid #3b82f6;
+      border-radius: 15px;
+      padding: 1.5rem;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 4px 6px rgba(59, 130, 246, 0.1);
+    }
+    .location-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .location-icon-large {
+      font-size: 2.5rem;
+      min-width: 3rem;
+    }
+    .location-header h4 {
+      margin: 0 0 0.3rem 0;
+      color: #1e40af;
+      font-size: 1.2rem;
+    }
+    .location-header p {
+      margin: 0;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+    .location-actions {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+    }
+    .btn-small {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.3s;
+    }
+    .btn-small:hover:not(:disabled) {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+    .btn-small:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    .route-info {
+      background: #dbeafe;
+      border: 1px solid #3b82f6;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .shelter-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .shelter-card {
+      background: #f0fdf4;
+      border: 1px solid #22c55e;
+      border-radius: 10px;
+      padding: 1rem;
+    }
+    .shelter-card h4 {
+      margin: 0 0 0.5rem 0;
+      color: #166534;
+    }
+    .shelter-card p {
+      margin: 0.3rem 0;
+      font-size: 0.9rem;
+    }
+    .distance {
+      font-weight: bold;
+      color: #dc2626;
+    }
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #6b7280;
+    }
+    .error {
+      background: #fee2e2;
+      border: 1px solid #ef4444;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      color: #dc2626;
     }
   </style>
 </head>
 <body>
-  <header>Evacuation Info</header>
-  <section>
-    <h2>Designated Safe Routes</h2>
-    <ul>
-      <li>Main Street → Community Shelter A</li>
-      <li>Maple Avenue → High School Gym</li>
-      <li>East Zone → Sports Arena via River Road</li>
-    </ul>
+  <header>
+    <span>Evacuation Info</span>
+    <div class="location-info">
+      <span id="location-status">📍 Detecting location...</span>
+    </div>
+  </header>
 
-    <h2>Shelter Locations</h2>
+  <section>
+    <div class="controls">
+      <button class="btn" id="detect-location">📍 Detect My Location</button>
+      <button class="btn" id="show-my-location">🎯 Show My Location on Map</button>
+      <button class="btn" id="show-routes">🗺️ Show Evacuation Routes</button>
+      <button class="btn" id="refresh-map">🔄 Refresh Map</button>
+    </div>
+
+    <div id="location-status-box" class="location-status" style="display: none;">
+      <h3>📍 My Current Location</h3>
+      <div class="location-details">
+        <div class="location-item">
+          <span class="location-icon">🌍</span>
+          <div>
+            <strong>Coordinates:</strong>
+            <span id="coordinates">Loading coordinates...</span>
+          </div>
+        </div>
+        <div class="location-item">
+          <span class="location-icon">🏠</span>
+          <div>
+            <strong>Address:</strong>
+            <span id="address">Loading address...</span>
+          </div>
+        </div>
+        <div class="location-item">
+          <span class="location-icon">⏰</span>
+          <div>
+            <strong>Last Updated:</strong>
+            <span id="last-updated">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="map-container" class="map-container"></div>
+    
+    <!-- My Location Section - Always Visible -->
+    <div class="my-location-section">
+      <h3>🎯 My Current Location</h3>
+      <div class="location-summary">
+        <div class="location-card">
+          <div class="location-header">
+            <span class="location-icon-large">📍</span>
+            <div>
+              <h4 id="location-title">Location Not Detected</h4>
+              <p id="location-subtitle">Click "Detect My Location" to get started</p>
+            </div>
+          </div>
+          <div class="location-actions">
+            <button class="btn-small" id="copy-coordinates" disabled>📋 Copy Coordinates</button>
+            <button class="btn-small" id="share-location" disabled>📤 Share Location</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="route-info" class="route-info" style="display: none;">
+      <h3>🚨 Recommended Evacuation Routes</h3>
+      <div id="routes-list"></div>
+    </div>
+
+    <h2>🏠 Nearby Emergency Shelters</h2>
+    <div id="shelters-container" class="shelter-list">
+      <div class="loading">Loading shelters based on your location...</div>
+    </div>
+
+    <h2>📋 General Evacuation Guidelines</h2>
     <ul>
-      <li>Community Shelter A – 123 Relief Lane</li>
-      <li>High School Gym – 456 Maple Ave</li>
-      <li>Sports Arena – 789 River Road</li>
+      <li>Stay calm and follow official instructions</li>
+      <li>Use designated evacuation routes when possible</li>
+      <li>Bring essential items: ID, medications, water, phone</li>
+      <li>Stay together with family members</li>
+      <li>Listen to emergency broadcasts on radio/TV</li>
+      <li>Do not use elevators during emergencies</li>
     </ul>
   </section>
+
+  <script>
+    let map;
+    let userMarker;
+    let currentLocation = null;
+    let shelters = [
+      {
+        name: "RUET Community Center",
+        location: [24.3636, 88.6241], // RUET Campus, Rajshahi
+        address: "RUET Campus, Rajshahi",
+        capacity: "500+ people",
+        facilities: "Medical aid, Food, Water"
+      },
+      {
+        name: "RUET Sports Complex",
+        location: [24.3630, 88.6245],
+        address: "Near RUET Main Gate, Rajshahi",
+        capacity: "300+ people",
+        facilities: "Basic shelter, Water"
+      },
+      {
+        name: "RUET Auditorium",
+        location: [24.3640, 88.6235],
+        address: "College Road, Rajshahi",
+        capacity: "400+ people",
+        facilities: "Shelter, Communication center"
+      },
+      {
+        name: "Rajshahi Medical College Hospital",
+        location: [24.3650, 88.6250],
+        address: "Medical College Road, Rajshahi",
+        capacity: "1000+ people",
+        facilities: "Medical aid, Emergency care"
+      },
+      {
+        name: "Rajshahi City Corporation Building",
+        location: [24.3660, 88.6260],
+        address: "City Center, Rajshahi",
+        capacity: "800+ people",
+        facilities: "Emergency coordination, Communication"
+      }
+    ];
+
+    // Initialize map
+    function initMap() {
+      map = L.map('map-container').setView([24.3636, 88.6241], 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+    }
+
+    // Calculate distance between two points
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // Earth's radius in km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    // Get user's current location
+    function detectLocation() {
+      const statusBox = document.getElementById('location-status-box');
+      const statusText = document.getElementById('location-status');
+      const coordinatesText = document.getElementById('coordinates');
+      const addressText = document.getElementById('address');
+      const locationTitle = document.getElementById('location-title');
+      const locationSubtitle = document.getElementById('location-subtitle');
+      const copyBtn = document.getElementById('copy-coordinates');
+      const shareBtn = document.getElementById('share-location');
+
+      statusText.textContent = '📍 Detecting location...';
+      statusBox.style.display = 'block';
+      
+      // Update the main location card
+      locationTitle.textContent = 'Detecting Location...';
+      locationSubtitle.textContent = 'Please wait while we get your coordinates...';
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            currentLocation = { lat: latitude, lng: longitude };
+            
+            const coordinates = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+            coordinatesText.textContent = `Coordinates: ${coordinates}`;
+            statusText.textContent = '📍 Location detected!';
+            
+            // Update the main location card
+            locationTitle.textContent = 'Location Detected!';
+            locationSubtitle.textContent = coordinates;
+            
+            // Enable action buttons
+            copyBtn.disabled = false;
+            shareBtn.disabled = false;
+            
+            // Update last updated time
+            document.getElementById('last-updated').textContent = new Date().toLocaleTimeString();
+            
+            // Update map
+            updateMapWithLocation(latitude, longitude);
+            
+            // Get address using reverse geocoding
+            getAddressFromCoordinates(latitude, longitude, addressText);
+            
+            // Show nearby shelters
+            showNearbyShelters(latitude, longitude);
+            
+            // Show evacuation routes
+            showEvacuationRoutes(latitude, longitude);
+          },
+          (error) => {
+            console.error('Error getting location:', error);
+            statusText.textContent = '❌ Location access denied';
+            coordinatesText.textContent = 'Unable to get your location. Please enable location access.';
+            addressText.textContent = 'Address unavailable';
+            
+            // Show default shelters
+            showDefaultShelters();
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000
+          }
+        );
+      } else {
+        statusText.textContent = '❌ Geolocation not supported';
+        coordinatesText.textContent = 'Your browser does not support location detection.';
+        addressText.textContent = 'Address unavailable';
+        showDefaultShelters();
+      }
+    }
+
+    // Update map with user location
+    function updateMapWithLocation(lat, lng) {
+      if (userMarker) {
+        map.removeLayer(userMarker);
+      }
+      
+      userMarker = L.marker([lat, lng], {
+        icon: L.divIcon({
+          className: 'user-location',
+          html: '📍',
+          iconSize: [30, 30]
+        })
+      }).addTo(map);
+      
+      map.setView([lat, lng], 15);
+      
+      // Add shelters to map
+      shelters.forEach(shelter => {
+        const distance = calculateDistance(lat, lng, shelter.location[0], shelter.location[1]);
+        const marker = L.marker(shelter.location).addTo(map);
+        marker.bindPopup(`
+          <strong>${shelter.name}</strong><br>
+          Distance: ${distance.toFixed(2)} km<br>
+          Capacity: ${shelter.capacity}<br>
+          Facilities: ${shelter.facilities}
+        `);
+      });
+    }
+
+    // Get address from coordinates using reverse geocoding
+    async function getAddressFromCoordinates(lat, lng, addressElement) {
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
+        const data = await response.json();
+        
+        if (data.display_name) {
+          addressElement.textContent = `Address: ${data.display_name}`;
+        } else {
+          addressElement.textContent = 'Address: Location detected';
+        }
+      } catch (error) {
+        console.error('Error getting address:', error);
+        addressElement.textContent = 'Address: Location detected';
+      }
+    }
+
+    // Show nearby shelters based on user location
+    function showNearbyShelters(userLat, userLng) {
+      const container = document.getElementById('shelters-container');
+      
+      // Calculate distances and sort shelters
+      const sheltersWithDistance = shelters.map(shelter => ({
+        ...shelter,
+        distance: calculateDistance(userLat, userLng, shelter.location[0], shelter.location[1])
+      })).sort((a, b) => a.distance - b.distance);
+
+      container.innerHTML = '';
+      
+      sheltersWithDistance.forEach(shelter => {
+        const shelterCard = document.createElement('div');
+        shelterCard.className = 'shelter-card';
+        shelterCard.innerHTML = `
+          <h4>${shelter.name}</h4>
+          <p><strong>Distance:</strong> <span class="distance">${shelter.distance.toFixed(2)} km</span></p>
+          <p><strong>Address:</strong> ${shelter.address}</p>
+          <p><strong>Capacity:</strong> ${shelter.capacity}</p>
+          <p><strong>Facilities:</strong> ${shelter.facilities}</p>
+        `;
+        container.appendChild(shelterCard);
+      });
+    }
+
+    // Show default shelters when location is not available
+    function showDefaultShelters() {
+      const container = document.getElementById('shelters-container');
+      container.innerHTML = '';
+      
+      shelters.forEach(shelter => {
+        const shelterCard = document.createElement('div');
+        shelterCard.className = 'shelter-card';
+        shelterCard.innerHTML = `
+          <h4>${shelter.name}</h4>
+          <p><strong>Address:</strong> ${shelter.address}</p>
+          <p><strong>Capacity:</strong> ${shelter.capacity}</p>
+          <p><strong>Facilities:</strong> ${shelter.facilities}</p>
+        `;
+        container.appendChild(shelterCard);
+      });
+    }
+
+    // Show evacuation routes
+    function showEvacuationRoutes(userLat, userLng) {
+      const routeInfo = document.getElementById('route-info');
+      const routesList = document.getElementById('routes-list');
+      
+      if (!currentLocation) {
+        routeInfo.style.display = 'none';
+        return;
+      }
+
+      routeInfo.style.display = 'block';
+      
+      // Find nearest shelter
+      const nearestShelter = shelters.reduce((nearest, shelter) => {
+        const distance = calculateDistance(userLat, userLng, shelter.location[0], shelter.location[1]);
+        if (!nearest || distance < nearest.distance) {
+          return { ...shelter, distance };
+        }
+        return nearest;
+      });
+
+      // Generate route suggestions
+      const routes = [
+        {
+          name: "Primary Route",
+          description: `Direct route to ${nearestShelter.name}`,
+          distance: nearestShelter.distance.toFixed(2) + " km",
+          time: Math.ceil(nearestShelter.distance * 12) + " minutes (walking)",
+          type: "primary"
+        },
+        {
+          name: "Alternative Route 1",
+          description: "Via main roads and landmarks",
+          distance: (nearestShelter.distance * 1.2).toFixed(2) + " km",
+          time: Math.ceil(nearestShelter.distance * 1.2 * 12) + " minutes (walking)",
+          type: "alternative"
+        },
+        {
+          name: "Emergency Route",
+          description: "Shortest path avoiding main roads",
+          distance: (nearestShelter.distance * 0.9).toFixed(2) + " km",
+          time: Math.ceil(nearestShelter.distance * 0.9 * 12) + " minutes (walking)",
+          type: "emergency"
+        }
+      ];
+
+      routesList.innerHTML = '';
+      routes.forEach(route => {
+        const routeDiv = document.createElement('div');
+        routeDiv.style.cssText = `
+          background: ${route.type === 'primary' ? '#dbeafe' : route.type === 'emergency' ? '#fee2e2' : '#f0fdf4'};
+          border: 1px solid ${route.type === 'primary' ? '#3b82f6' : route.type === 'emergency' ? '#ef4444' : '#22c55e'};
+          border-radius: 10px;
+          padding: 1rem;
+          margin: 0.5rem 0;
+        `;
+        routeDiv.innerHTML = `
+          <h4 style="margin: 0 0 0.5rem 0; color: ${route.type === 'primary' ? '#1e40af' : route.type === 'emergency' ? '#dc2626' : '#166534'}">
+            ${route.name}
+          </h4>
+          <p><strong>Description:</strong> ${route.description}</p>
+          <p><strong>Distance:</strong> ${route.distance}</p>
+          <p><strong>Estimated Time:</strong> ${route.time}</p>
+        `;
+        routesList.appendChild(routeDiv);
+      });
+    }
+
+    // Copy coordinates to clipboard
+    function copyCoordinates() {
+      if (currentLocation) {
+        const coordinates = `${currentLocation.lat.toFixed(6)}, ${currentLocation.lng.toFixed(6)}`;
+        navigator.clipboard.writeText(coordinates).then(() => {
+          alert('Coordinates copied to clipboard!');
+        }).catch(() => {
+          alert('Failed to copy coordinates');
+        });
+      }
+    }
+
+    // Share location
+    function shareLocation() {
+      if (currentLocation && navigator.share) {
+        navigator.share({
+          title: 'My Current Location',
+          text: `My location: ${currentLocation.lat.toFixed(6)}, ${currentLocation.lng.toFixed(6)}`,
+          url: `https://maps.google.com/?q=${currentLocation.lat},${currentLocation.lng}`
+        });
+      } else if (currentLocation) {
+        // Fallback for browsers without Web Share API
+        const coordinates = `${currentLocation.lat.toFixed(6)}, ${currentLocation.lng.toFixed(6)}`;
+        const mapUrl = `https://maps.google.com/?q=${currentLocation.lat},${currentLocation.lng}`;
+        alert(`Location: ${coordinates}\n\nMap: ${mapUrl}`);
+      }
+    }
+
+    // Show user location on map
+    function showMyLocationOnMap() {
+      if (currentLocation) {
+        map.setView([currentLocation.lat, currentLocation.lng], 18);
+        if (userMarker) {
+          userMarker.openPopup();
+        }
+      } else {
+        alert('Please detect your location first!');
+      }
+    }
+
+    // Event listeners
+    document.getElementById('detect-location').addEventListener('click', detectLocation);
+    document.getElementById('show-my-location').addEventListener('click', showMyLocationOnMap);
+    document.getElementById('show-routes').addEventListener('click', () => {
+      if (currentLocation) {
+        showEvacuationRoutes(currentLocation.lat, currentLocation.lng);
+      } else {
+        alert('Please detect your location first!');
+      }
+    });
+    document.getElementById('refresh-map').addEventListener('click', () => {
+      if (map) {
+        map.invalidateSize();
+      }
+    });
+    document.getElementById('copy-coordinates').addEventListener('click', copyCoordinates);
+    document.getElementById('share-location').addEventListener('click', shareLocation);
+
+    // Initialize page
+    window.addEventListener('load', () => {
+      initMap();
+      showDefaultShelters();
+    });
+  </script>
 </body>
 </html>
