@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1756039346939",
+    "itemName": "Phone",
+    "description": "Samsung Galaxy s-21 ultra",
+    "location": "Bathroom",
+    "contactInfo": "01836464431",
+    "timestamp": "2025-08-24T12:42:26.927Z",
+    "status": "Lost",
+    "type": "lost"
+  },
+  {
+    "id": "1756039415911",
+    "itemName": "Phone",
+    "description": "Samsung Galaxy S-21 Ultra",
+    "location": "Library",
+    "foundBy": "Shakkhor",
+    "timestamp": "2025-08-24T12:43:35.903Z",
+    "status": "Found",
+    "type": "found"
+  },
+  {
+    "id": "1757727519169",
+    "itemName": "Phone",
+    "description": "fymcjgnh ",
+    "location": "Library",
+    "contactInfo": "01836464431",
+    "timestamp": "2025-09-13T01:38:38.984Z",
+    "status": "Lost",
+    "type": "lost"
+  },
+  {
+    "id": "1757727623640",
+    "itemName": "Phone",
+    "description": "fycjty",
+    "location": "Shahidul Hall room 417",
+    "foundBy": "Shakkhor",
+    "timestamp": "2025-09-13T01:40:23.591Z",
+    "status": "Found",
+    "type": "found"
+  }
+]

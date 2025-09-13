@@ -1,0 +1,166 @@
+{
+  "users": [
+    {
+      "username": "user1",
+      "email": "user1@disasterrelief.com",
+      "password": "userpass123",
+      "role": "user"
+    },
+    {
+      "username": "volunteer1",
+      "email": "volunteer1@disasterrelief.com",
+      "password": "volpass123",
+      "role": "volunteer"
+    },
+    {
+      "username": "admin1",
+      "email": "admin1@disasterrelief.com",
+      "password": "adminpass123",
+      "role": "admin"
+    },
+    {
+      "username": "Phoenix_Chaos",
+      "email": "phoenix.chaos@disasterrelief.com",
+      "password": "lament",
+      "role": "user"
+    },
+    {
+      "username": "asdf",
+      "email": "asdf@disasterrelief.com",
+      "password": "1234567890",
+      "role": "user"
+    },
+    {
+      "username": "Abidur Rahman Sadik",
+      "email": "abidur@gmail.com",
+      "password": "abidur",
+      "role": "user"
+    },
+    {
+      "username": "Md. Nahid Hossain Bhuiyan",
+      "email": "nhb@gmail.com",
+      "password": "nhb",
+      "role": "user"
+    },
+    {
+      "username": "hridoy khan",
+      "email": "hk@gmail.com",
+      "password": "hk",
+      "role": "user"
+    },
+    {
+      "username": "sanemi shinajugawa",
+      "email": "ss@gmail.com",
+      "password": "ss",
+      "role": "user"
+    },
+    {
+      "username": "Iguro Obanai",
+      "email": "io@gmail.com",
+      "password": "io",
+      "role": "user"
+    },
+    {
+      "username": "Kyojuro Rengoku",
+      "email": "kr@gmail.com",
+      "password": "kr",
+      "role": "user"
+    },
+    {
+      "username": "Sharif Hossain",
+      "email": "sh@gmail.com",
+      "password": "sh",
+      "role": "user"
+    },
+    {
+      "username": "qazx",
+      "email": "qa@gmail.com",
+      "password": "qa",
+      "role": "user"
+    },
+    {
+      "username": "a",
+      "email": "abisdfdur@gmail.com",
+      "password": "a",
+      "role": "user"
+    },
+    {
+      "username": "asda",
+      "email": "nhbasd@gmail.com",
+      "password": "asd",
+      "role": "user"
+    },
+    {
+      "username": "sdf",
+      "email": "usasder1@disasterrelief.com",
+      "password": "asd",
+      "role": "user"
+    },
+    {
+      "username": "asd",
+      "email": "mehesddiabrar14@gmail.com",
+      "password": "asd",
+      "role": "user"
+    },
+    {
+      "username": "plm",
+      "email": "plm@gmail.com",
+      "password": "plm",
+      "role": "user"
+    },
+    {
+      "username": "plm1",
+      "email": "plm1@gmail.com",
+      "password": "plm1",
+      "role": "user"
+    },
+    {
+      "username": "plm2",
+      "email": "plm2@gmail.com",
+      "password": "plm2",
+      "role": "user"
+    },
+    {
+      "username": "plm3",
+      "email": "plm3@gmail.com",
+      "password": "plm3",
+      "role": "user"
+    },
+    {
+      "username": "plm4",
+      "email": "plm4@gmail.com",
+      "password": "plm",
+      "role": "user"
+    },
+    {
+      "username": "plm5",
+      "email": "plm5@gmail.com",
+      "password": "plm5",
+      "role": "user"
+    },
+    {
+      "username": "plm6",
+      "email": "plm6@gmail.com",
+      "password": "plm6",
+      "role": "user"
+    },
+    {
+      "username": "user12",
+      "email": "user12@gmail.com",
+      "password": "user12",
+      "role": "user"
+    },
+    {
+      "username": "mushfiq",
+      "email": "mushfiq28@gmail.com",
+      "password": "mushfiq",
+      "role": "user"
+    },
+    {
+      "username": "emon",
+      "email": "emon48@gmail.com",
+      "password": "emon48",
+      "role": "user"
+    }
+  ]
+}
