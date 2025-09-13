@@ -1,65 +1,681 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Collaboration Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #fff1f2;
-      color: #1f2937;
+      background: #ecfeff;
+      color: #1e293b;
     }
+
     header {
-      background: #ef4444;
+      background: #0ea5e9;
       color: white;
       padding: 1rem 2rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    header h1 {
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1rem;
+    }
+
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+
+    main {
+      padding: 1rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 1rem;
+      height: calc(100vh - 120px);
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border: 1px solid #bae6fd;
+    }
+
+    .card h3 {
+      margin: 0 0 1rem 0;
+      color: #0369a1;
       font-family: 'Orbitron', sans-serif;
-      margin: 0;
-      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    #user-role {
-      font-family: 'Black Ops One', sans-serif;
-      font-size: 1.2rem;
-      background-color: white;
-      color: #ef4444;
-      padding: 0.4rem 1rem;
-      border-radius: 999px;
-      border: 2px solid #f87171;
+
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
-    .page-container {
-      padding: 2rem;
-      max-width: 1000px;
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 400px;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      background: #f8fafc;
+      border-radius: 8px;
     }
-    h2 {
-      color: #b91c1c;
-      font-size: 1.6rem;
-      font-family: 'Orbitron', sans-serif;
+
+    .message {
+      background: #e0f2fe;
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      border-left: 4px solid #0ea5e9;
+    }
+
+    .message.urgent {
+      background: #fef2f2;
+      border-left-color: #ef4444;
+    }
+
+    .message.system {
+      background: #f0fdf4;
+      border-left-color: #10b981;
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.25rem;
+    }
+
+    .message-author {
+      font-weight: 600;
+      color: #0369a1;
+    }
+
+    .message-time {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+
+    .message-content {
+      color: #1e293b;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 0.75rem;
+      border: 2px solid #bae6fd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .chat-input input:focus {
+      outline: none;
+      border-color: #0ea5e9;
+    }
+
+    .btn {
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background: #0284c7;
+    }
+
+    .btn-urgent {
+      background: #ef4444;
+    }
+
+    .btn-urgent:hover {
+      background: #dc2626;
+    }
+
+    .btn-small {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+    }
+
+    .team-list {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .team-member {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+    .member-status {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .status-online { background: #10b981; }
+    .status-busy { background: #f59e0b; }
+    .status-offline { background: #6b7280; }
+
+    .member-info {
+      flex: 1;
+    }
+
+    .member-name {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .member-role {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
       margin-bottom: 1rem;
     }
-    p {
-      font-size: 1.05rem;
-      color: #374151;
-      line-height: 1.6;
+
+    .resource-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      background: #f8fafc;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+
+    .resource-name {
+      font-weight: 500;
+    }
+
+    .resource-status {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+    }
+
+    .status-high {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-medium {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-low {
+      background: #fecaca;
+      color: #991b1b;
+    }
+
+    .status-out {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+
+    .alert-banner {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 1rem;
+    }
+
+    .tab {
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .tab.active {
+      border-bottom-color: #0ea5e9;
+      color: #0ea5e9;
+      font-weight: 600;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      
+      .sidebar {
+        order: -1;
+      }
+      
+      .chat-messages {
+        max-height: 300px;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Admin Portal</h1>
-    <div id="user-role">ADMIN</div>
+    <div>
+      <i class="fas fa-users"></i> Collaboration Hub
+    </div>
+    <div class="user-info">
+      <div class="status-indicator"></div>
+      <span>Volunteer1</span>
+    </div>
   </header>
 
-  <div class="page-container">
-    <h2>Collaboration Hub</h2>
-    <p>Enable seamless coordination between agencies, NGOs, and response teams. Share documents, updates, and strategies in one place.</p>
-  </div>
+  <main>
+    <!-- Emergency Alert Banner -->
+    <div class="alert-banner" id="emergency-alert" style="display: none;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span id="alert-message">Emergency Alert: Immediate assistance needed at Zone A</span>
+      <button class="btn btn-small" onclick="acknowledgeAlert()" style="margin-left: auto;">
+        <i class="fas fa-check"></i> Acknowledge
+      </button>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="main-content">
+        <!-- Communication Tabs -->
+        <div class="card">
+          <div class="tabs">
+            <div class="tab active" onclick="switchTab('general')">
+              <i class="fas fa-comments"></i> General Chat
+            </div>
+            <div class="tab" onclick="switchTab('urgent')">
+              <i class="fas fa-exclamation-circle"></i> Urgent Updates
+            </div>
+            <div class="tab" onclick="switchTab('coordination')">
+              <i class="fas fa-tasks"></i> Task Coordination
+            </div>
+          </div>
+
+          <!-- General Chat -->
+          <div id="general-tab" class="tab-content active">
+            <div class="chat-container">
+              <div class="chat-messages" id="general-messages">
+                <!-- Messages will be populated here -->
+              </div>
+              <div class="chat-input">
+                <input type="text" id="general-input" placeholder="Type your message..." onkeypress="handleEnter(event, 'general')">
+                <button class="btn" onclick="sendMessage('general')">
+                  <i class="fas fa-paper-plane"></i> Send
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Urgent Updates -->
+          <div id="urgent-tab" class="tab-content">
+            <div class="chat-container">
+              <div class="chat-messages" id="urgent-messages">
+                <!-- Urgent messages will be populated here -->
+              </div>
+              <div class="chat-input">
+                <input type="text" id="urgent-input" placeholder="Type urgent update..." onkeypress="handleEnter(event, 'urgent')">
+                <button class="btn btn-urgent" onclick="sendMessage('urgent')">
+                  <i class="fas fa-exclamation-triangle"></i> Send Alert
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Task Coordination -->
+          <div id="coordination-tab" class="tab-content">
+            <div class="chat-container">
+              <div class="chat-messages" id="coordination-messages">
+                <!-- Task coordination messages will be populated here -->
+              </div>
+              <div class="chat-input">
+                <input type="text" id="coordination-input" placeholder="Share task updates..." onkeypress="handleEnter(event, 'coordination')">
+                <button class="btn" onclick="sendMessage('coordination')">
+                  <i class="fas fa-share"></i> Share
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <!-- Team Status -->
+        <div class="card">
+          <h3><i class="fas fa-users"></i> Team Status</h3>
+          <div class="team-list" id="team-list">
+            <!-- Team members will be populated here -->
+          </div>
+        </div>
+
+
+        <!-- Resource Status -->
+        <div class="card">
+          <h3><i class="fas fa-boxes"></i> Resource Status</h3>
+          <div id="resource-list">
+            <!-- Resources will be populated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Load messages from localStorage or use default data
+    function loadMessages() {
+      const savedMessages = localStorage.getItem('collaborationMessages');
+      if (savedMessages) {
+        return JSON.parse(savedMessages);
+      }
+      
+      // Default message data if none saved
+      return {
+        general: [
+          {
+            id: 1,
+            author: "John Smith",
+            content: "Transport available for Zone 4, need 2 volunteers to assist.",
+            time: "10:30 AM",
+            type: "general"
+          },
+          {
+            id: 2,
+            author: "Emily Brown",
+            content: "Medical supplies distributed successfully at evacuation center.",
+            time: "10:45 AM",
+            type: "general"
+          }
+        ],
+        urgent: [
+          {
+            id: 3,
+            author: "Michael Chen",
+            content: "Supplies at Point B are running critically low, immediate restocking needed!",
+            time: "11:00 AM",
+            type: "urgent"
+          }
+        ],
+        coordination: [
+          {
+            id: 4,
+            author: "Sarah Johnson",
+            content: "Task #12 completed - Food distribution at Community Center finished.",
+            time: "11:15 AM",
+            type: "system"
+          }
+        ]
+      };
+    }
+
+    // Save messages to localStorage
+    function saveMessages() {
+      localStorage.setItem('collaborationMessages', JSON.stringify(messages));
+    }
+
+    let messages = loadMessages();
+
+    let teamMembers = [
+      { name: "John Smith", role: "Medical Team", status: "online" },
+      { name: "Emily Brown", role: "Logistics", status: "busy" },
+      { name: "Michael Chen", role: "Coordination", status: "online" },
+      { name: "Lisa Davis", role: "Rescue Team", status: "offline" }
+    ];
+
+    // Load resources from localStorage or use default data from admin dashboard
+    function loadResources() {
+      const savedResources = localStorage.getItem('resources');
+      if (savedResources) {
+        return JSON.parse(savedResources);
+      }
+      
+      // Default resource data matching admin dashboard structure
+      return [
+        { name: "First Aid Kits", status: "high", category: "medical", quantity: 150, unit: "units", location: "Warehouse A" },
+        { name: "Pain Relievers", status: "medium", category: "medical", quantity: 500, unit: "tablets", location: "Medical Center" },
+        { name: "Oxygen Tanks", status: "low", category: "medical", quantity: 25, unit: "units", location: "Emergency Depot" },
+        { name: "Medical Supplies", status: "medium", category: "medical", quantity: 200, unit: "kits", location: "Warehouse B" },
+        { name: "Rescue Ropes", status: "high", category: "rescue", quantity: 200, unit: "meters", location: "Equipment Shed" },
+        { name: "Life Jackets", status: "medium", category: "rescue", quantity: 75, unit: "units", location: "Water Rescue Unit" },
+        { name: "Cutting Tools", status: "low", category: "rescue", quantity: 15, unit: "sets", location: "Equipment Shed" },
+        { name: "Emergency Tents", status: "high", category: "shelter", quantity: 50, unit: "units", location: "Shelter Depot" },
+        { name: "Blankets", status: "high", category: "shelter", quantity: 300, unit: "units", location: "Shelter Depot" },
+        { name: "Water Containers", status: "medium", category: "shelter", quantity: 100, unit: "units", location: "Water Depot" },
+        { name: "Ambulances", status: "medium", category: "transport", quantity: 8, unit: "vehicles", location: "Vehicle Depot" },
+        { name: "Rescue Trucks", status: "low", category: "transport", quantity: 5, unit: "vehicles", location: "Vehicle Depot" },
+        { name: "Fuel (Diesel)", status: "high", category: "transport", quantity: 2000, unit: "liters", location: "Fuel Depot" },
+        { name: "Emergency Radios", status: "medium", category: "communication", quantity: 45, unit: "units", location: "Comm Center" },
+        { name: "Satellite Phones", status: "low", category: "communication", quantity: 12, unit: "units", location: "Comm Center" },
+        { name: "Megaphones", status: "high", category: "communication", quantity: 20, unit: "units", location: "Comm Center" },
+        { name: "Non-perishable Food", status: "high", category: "food", quantity: 500, unit: "meals", location: "Food Depot" },
+        { name: "Water Purification Tablets", status: "high", category: "food", quantity: 1000, unit: "tablets", location: "Water Depot" },
+        { name: "Energy Bars", status: "low", category: "food", quantity: 200, unit: "units", location: "Food Depot" }
+      ];
+    }
+
+    let resources = loadResources();
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      populateMessages();
+      populateTeamList();
+      populateResourceList();
+      
+      // Simulate emergency alert after 3 seconds
+      setTimeout(() => {
+        showEmergencyAlert("Flood warning issued for Zone C - All volunteers evacuate immediately!");
+      }, 3000);
+    });
+
+    function populateMessages() {
+      Object.keys(messages).forEach(tab => {
+        const container = document.getElementById(`${tab}-messages`);
+        container.innerHTML = '';
+        
+        messages[tab].forEach(message => {
+          const messageEl = document.createElement('div');
+          messageEl.className = `message ${message.type}`;
+          messageEl.innerHTML = `
+            <div class="message-header">
+              <span class="message-author">${message.author}</span>
+              <span class="message-time">${message.time}</span>
+            </div>
+            <div class="message-content">${message.content}</div>
+          `;
+          container.appendChild(messageEl);
+        });
+        
+        container.scrollTop = container.scrollHeight;
+      });
+    }
+
+    function populateTeamList() {
+      const teamList = document.getElementById('team-list');
+      teamList.innerHTML = '';
+      
+      teamMembers.forEach(member => {
+        const memberEl = document.createElement('div');
+        memberEl.className = 'team-member';
+        memberEl.innerHTML = `
+          <div class="member-status status-${member.status}"></div>
+          <div class="member-info">
+            <div class="member-name">${member.name}</div>
+            <div class="member-role">${member.role}</div>
+          </div>
+        `;
+        teamList.appendChild(memberEl);
+      });
+    }
+
+    function populateResourceList() {
+      const resourceList = document.getElementById('resource-list');
+      resourceList.innerHTML = '';
+      
+      // Group resources by category for better organization
+      const categories = {};
+      resources.forEach(resource => {
+        if (!categories[resource.category]) {
+          categories[resource.category] = [];
+        }
+        categories[resource.category].push(resource);
+      });
+
+      // Display resources by category
+      Object.keys(categories).forEach(category => {
+        const categoryHeader = document.createElement('div');
+        categoryHeader.style.cssText = 'font-weight: 600; color: #0369a1; margin: 1rem 0 0.5rem 0; text-transform: capitalize; border-bottom: 1px solid #bae6fd; padding-bottom: 0.25rem;';
+        categoryHeader.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+        resourceList.appendChild(categoryHeader);
+
+        categories[category].forEach(resource => {
+          const resourceEl = document.createElement('div');
+          resourceEl.className = 'resource-item';
+          resourceEl.innerHTML = `
+            <div style="flex: 1;">
+              <div class="resource-name">${resource.name}</div>
+              <div style="font-size: 0.75rem; color: #64748b;">${resource.quantity} ${resource.unit} • ${resource.location}</div>
+            </div>
+            <span class="resource-status status-${resource.status}">${getStatusText(resource.status)}</span>
+          `;
+          resourceList.appendChild(resourceEl);
+        });
+      });
+    }
+
+    function getStatusText(status) {
+      switch(status) {
+        case 'high': return 'AVAILABLE';
+        case 'medium': return 'MODERATE';
+        case 'low': return 'LOW';
+        case 'out': return 'CRITICAL';
+        default: return status.toUpperCase();
+      }
+    }
+
+    function switchTab(tabName) {
+      // Remove active class from all tabs and content
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      // Add active class to selected tab and content
+      event.target.classList.add('active');
+      document.getElementById(`${tabName}-tab`).classList.add('active');
+    }
+
+    function sendMessage(type) {
+      const input = document.getElementById(`${type}-input`);
+      const content = input.value.trim();
+      
+      if (content) {
+        const newMessage = {
+          id: Date.now(),
+          author: "Sarah Johnson", // Current user
+          content: content,
+          time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+          type: type
+        };
+        
+        messages[type].push(newMessage);
+        saveMessages(); // Save to localStorage
+        populateMessages();
+        input.value = '';
+      }
+    }
+
+    function handleEnter(event, type) {
+      if (event.key === 'Enter') {
+        sendMessage(type);
+      }
+    }
+
+
+    function showEmergencyAlert(message) {
+      const alertBanner = document.getElementById('emergency-alert');
+      const alertMessage = document.getElementById('alert-message');
+      alertMessage.textContent = message;
+      alertBanner.style.display = 'flex';
+    }
+
+    function acknowledgeAlert() {
+      document.getElementById('emergency-alert').style.display = 'none';
+    }
+  </script>
 </body>
 </html>

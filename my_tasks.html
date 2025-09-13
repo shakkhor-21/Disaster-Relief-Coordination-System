@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Tasks</title>
+  <title>Volunteer Tasks</title>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -66,27 +66,433 @@
       font-size: 1rem;
       color: #334155;
     }
+    .task-item {
+      background: white;
+      border: 2px solid #0ea5e9;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 6px rgba(14, 165, 233, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .task-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(14, 165, 233, 0.2);
+    }
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    .task-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #0369a1;
+      margin: 0;
+    }
+    .task-meta {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .priority-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .priority-high {
+      background: #fecaca;
+      color: #dc2626;
+    }
+    .priority-medium {
+      background: #fed7aa;
+      color: #ea580c;
+    }
+    .priority-low {
+      background: #d1fae5;
+      color: #059669;
+    }
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .status-pending {
+      background: #fef3c7;
+      color: #d97706;
+    }
+    .status-in-progress {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+    .status-completed {
+      background: #d1fae5;
+      color: #059669;
+    }
+    .task-description {
+      color: #64748b;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .task-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #475569;
+      font-size: 0.9rem;
+    }
+    .detail-item i {
+      color: #0ea5e9;
+      width: 16px;
+    }
+    .task-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .btn:hover {
+      background: #0284c7;
+    }
+    .btn-success {
+      background: #10b981;
+    }
+    .btn-success:hover {
+      background: #059669;
+    }
+    .btn-secondary {
+      background: #6b7280;
+    }
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: #64748b;
+      font-style: italic;
+    }
+    .no-tasks {
+      text-align: center;
+      padding: 3rem;
+      color: #64748b;
+      background: white;
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+    }
+    .no-tasks i {
+      font-size: 3rem;
+      color: #cbd5e1;
+      margin-bottom: 1rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: white;
+      border: 2px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #0369a1;
+      font-family: 'Orbitron', sans-serif;
+    }
+    .stat-label {
+      color: #64748b;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>My Tasks</h1>
+    <h1>Volunteer Tasks</h1>
     <div id="user-role">VOLUNTEER</div>
   </header>
   <div class="content">
+    <div class="section-title">Task Overview</div>
+    
+    <!-- Statistics -->
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="total-tasks">0</div>
+        <div class="stat-label">Total Tasks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="pending-tasks">0</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="active-tasks">0</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="completed-tasks">0</div>
+        <div class="stat-label">Completed</div>
+      </div>
+    </div>
+
     <div class="section-title">Assigned Tasks</div>
-    <div class="task-list">
-      <h3>Deliver medical kits to Zone A</h3>
-      <p>Deadline: April 9, 2025 – Ensure timely delivery and confirmation from field staff.</p>
-    </div>
-    <div class="task-list">
-      <h3>Assist in Evacuation Coordination</h3>
-      <p>Assist local authorities in guiding residents through designated evacuation routes.</p>
-    </div>
-    <div class="task-list">
-      <h3>Update Shelter Info</h3>
-      <p>Visit temporary shelters and report current status and resource needs.</p>
+    <div id="tasks-container">
+      <div class="loading" id="loading-message">Loading your assigned tasks...</div>
     </div>
   </div>
+
+  <script>
+    // Current volunteer ID - in a real app, this would come from authentication
+    const CURRENT_VOLUNTEER_ID = 1; // John Smith
+
+    // Load tasks from localStorage
+    function loadTasks() {
+      const savedTasks = localStorage.getItem('tasks');
+      if (savedTasks) {
+        return JSON.parse(savedTasks);
+      }
+      return [];
+    }
+
+    // Save tasks to localStorage
+    function saveTasks(tasks) {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    // Load volunteers from localStorage
+    function loadVolunteers() {
+      const savedVolunteers = localStorage.getItem('volunteers');
+      if (savedVolunteers) {
+        return JSON.parse(savedVolunteers);
+      }
+      
+      // Default volunteer data
+      return [
+        {
+          id: 1,
+          name: "John Smith",
+          skills: ["medical", "first-aid"],
+          status: "active",
+          location: "Central Hospital",
+          contact: "+1 234-567-8901"
+        },
+        {
+          id: 2,
+          name: "Sarah Johnson",
+          skills: ["rescue", "first-aid"],
+          status: "deployed",
+          location: "East District",
+          contact: "+1 234-567-8902"
+        },
+        {
+          id: 3,
+          name: "Michael Chen",
+          skills: ["logistics", "coordination"],
+          status: "active",
+          location: "Supply Center",
+          contact: "+1 234-567-8903"
+        },
+        {
+          id: 4,
+          name: "Emily Brown",
+          skills: ["medical", "coordination"],
+          status: "inactive",
+          location: "West District",
+          contact: "+1 234-567-8904"
+        }
+      ];
+    }
+
+    // Get volunteer name by ID
+    function getVolunteerName(volunteerId) {
+      const volunteers = loadVolunteers();
+      const volunteer = volunteers.find(v => v.id === volunteerId);
+      return volunteer ? volunteer.name : 'Unknown Volunteer';
+    }
+
+    // Filter tasks assigned to current volunteer
+    function getMyTasks() {
+      const allTasks = loadTasks();
+      return allTasks.filter(task => 
+        task.assignedVolunteers && 
+        task.assignedVolunteers.includes(CURRENT_VOLUNTEER_ID)
+      );
+    }
+
+    // Update task status
+    function updateTaskStatus(taskId, newStatus) {
+      const allTasks = loadTasks();
+      const task = allTasks.find(t => t.id === taskId);
+      if (task) {
+        task.status = newStatus;
+        saveTasks(allTasks);
+        renderTasks();
+        updateStats();
+      }
+    }
+
+    // Format date for display
+    function formatDate(dateString) {
+      if (!dateString) return 'No deadline';
+      const date = new Date(dateString);
+      return date.toLocaleDateString() + ' at ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }
+
+    // Get category icon
+    function getCategoryIcon(category) {
+      const icons = {
+        'rescue': 'fas fa-life-ring',
+        'medical': 'fas fa-heartbeat',
+        'supplies': 'fas fa-boxes',
+        'evacuation': 'fas fa-route',
+        'communication': 'fas fa-broadcast-tower',
+        'logistics': 'fas fa-truck'
+      };
+      return icons[category] || 'fas fa-tasks';
+    }
+
+    // Render tasks
+    function renderTasks() {
+      const myTasks = getMyTasks();
+      const container = document.getElementById('tasks-container');
+      const loadingMessage = document.getElementById('loading-message');
+      
+      if (loadingMessage) {
+        loadingMessage.style.display = 'none';
+      }
+
+      if (myTasks.length === 0) {
+        container.innerHTML = `
+          <div class="no-tasks">
+            <i class="fas fa-clipboard-list"></i>
+            <h3>No Tasks Assigned</h3>
+            <p>You don't have any tasks assigned yet. Check back later or contact your coordinator.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+      
+      myTasks.forEach(task => {
+        const taskElement = document.createElement('div');
+        taskElement.className = 'task-item';
+        
+        // Get other assigned volunteers (excluding current volunteer)
+        const otherVolunteers = task.assignedVolunteers
+          .filter(id => id !== CURRENT_VOLUNTEER_ID)
+          .map(id => getVolunteerName(id))
+          .join(', ');
+
+        taskElement.innerHTML = `
+          <div class="task-header">
+            <h3 class="task-title">${task.title}</h3>
+            <div class="task-meta">
+              <span class="priority-badge priority-${task.priority}">${task.priority}</span>
+              <span class="status-badge status-${task.status}">${task.status.replace('-', ' ')}</span>
+            </div>
+          </div>
+          
+          <div class="task-description">${task.description}</div>
+          
+          <div class="task-details">
+            <div class="detail-item">
+              <i class="${getCategoryIcon(task.category)}"></i>
+              <span>${task.category.charAt(0).toUpperCase() + task.category.slice(1)}</span>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>${task.location || 'Location TBD'}</span>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-clock"></i>
+              <span>${formatDate(task.deadline)}</span>
+            </div>
+            ${otherVolunteers ? `
+            <div class="detail-item">
+              <i class="fas fa-users"></i>
+              <span>With: ${otherVolunteers}</span>
+            </div>
+            ` : ''}
+          </div>
+          
+          <div class="task-actions">
+            ${task.status === 'pending' ? `
+              <button class="btn" onclick="updateTaskStatus(${task.id}, 'in-progress')">
+                <i class="fas fa-play"></i> Start Task
+              </button>
+            ` : ''}
+            ${task.status === 'in-progress' ? `
+              <button class="btn btn-success" onclick="updateTaskStatus(${task.id}, 'completed')">
+                <i class="fas fa-check"></i> Mark Complete
+              </button>
+            ` : ''}
+            ${task.status === 'completed' ? `
+              <button class="btn btn-secondary" disabled>
+                <i class="fas fa-check-circle"></i> Completed
+              </button>
+            ` : ''}
+          </div>
+        `;
+        
+        container.appendChild(taskElement);
+      });
+    }
+
+    // Update statistics
+    function updateStats() {
+      const myTasks = getMyTasks();
+      const totalTasks = myTasks.length;
+      const pendingTasks = myTasks.filter(t => t.status === 'pending').length;
+      const activeTasks = myTasks.filter(t => t.status === 'in-progress').length;
+      const completedTasks = myTasks.filter(t => t.status === 'completed').length;
+
+      document.getElementById('total-tasks').textContent = totalTasks;
+      document.getElementById('pending-tasks').textContent = pendingTasks;
+      document.getElementById('active-tasks').textContent = activeTasks;
+      document.getElementById('completed-tasks').textContent = completedTasks;
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      renderTasks();
+      updateStats();
+      
+      // Auto-refresh every 30 seconds to check for new tasks
+      setInterval(() => {
+        renderTasks();
+        updateStats();
+      }, 30000);
+    });
+  </script>
 </body>
 </html>

@@ -73,13 +73,38 @@
   <main>
     <section>
       <h2>Submit a Resource Request</h2>
-      <form>
-        <input type="text" placeholder="Resource Type (e.g., Water, Medicine)" required />
-        <input type="number" placeholder="Quantity Needed" required />
-        <textarea placeholder="Location Details" rows="4" required></textarea>
+      <form id="resourceForm">
+        <input name="resource_type" type="text" placeholder="Resource Type (e.g., Water, Medicine)" required />
+        <input name="quantity" type="number" placeholder="Quantity Needed" required />
+        <textarea name="location" placeholder="Location Details" rows="4" required></textarea>
         <button type="submit">Submit Request</button>
       </form>
     </section>
   </main>
+
+  <script>
+    document.getElementById('resourceForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const resource_type = this.resource_type.value;
+      const quantity = this.quantity.value;
+      const location = this.location.value;
+
+      try {
+        const response = await fetch('http://localhost:3000/submit_resource', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resource_type, quantity, location })
+        });
+
+        const data = await response.json();
+        alert(data.message || "Submitted successfully!");
+        this.reset();
+      } catch (error) {
+        alert('Error submitting request. Please try again later.');
+        console.error('Submit error:', error);
+      }
+    });
+  </script>
 </body>
 </html>

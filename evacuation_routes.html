@@ -10,13 +10,13 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #fff1f2;
+      background: #ecfeff;
       color: #065f46;
       padding: 2rem;
       margin: 0;
     }
     header {
-      background-color: #ef4444;
+      background-color: #0ea5e9;
       color: white;
       padding: 1.2rem 2rem;
       font-family: 'Black Ops One', sans-serif;
@@ -31,7 +31,7 @@
     }
     section {
       background: white;
-      border: 2px solid #fecaca;
+      border: 2px solid #a7f3d0;
       border-radius: 20px;
       padding: 2rem;
       max-width: 1200px;
@@ -42,7 +42,7 @@
       border-radius: 15px;
       overflow: hidden;
       margin: 1rem 0;
-      border: 2px solid #fecaca;
+      border: 2px solid #a7f3d0;
     }
     .controls {
       display: flex;
@@ -51,7 +51,7 @@
       flex-wrap: wrap;
     }
     .btn {
-      background: #ef4444;
+      background: #0ea5e9;
       color: white;
       border: none;
       padding: 0.8rem 1.5rem;
@@ -61,7 +61,7 @@
       transition: background 0.3s;
     }
     .btn:hover {
-      background: #dc2626;
+      background: #0284c7;
     }
     .btn:disabled {
       background: #9ca3af;
@@ -104,7 +104,7 @@
       margin: 2rem 0;
     }
     .my-location-section h3 {
-      color: #b91c1c;
+      color: #0369a1;
       margin-bottom: 1rem;
     }
     .location-summary {
@@ -112,13 +112,13 @@
       justify-content: center;
     }
     .location-card {
-      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-      border: 2px solid #ef4444;
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      border: 2px solid #0ea5e9;
       border-radius: 15px;
       padding: 1.5rem;
       max-width: 500px;
       width: 100%;
-      box-shadow: 0 4px 6px rgba(239, 68, 68, 0.1);
+      box-shadow: 0 4px 6px rgba(14, 165, 233, 0.1);
     }
     .location-header {
       display: flex;
@@ -132,7 +132,7 @@
     }
     .location-header h4 {
       margin: 0 0 0.3rem 0;
-      color: #b91c1c;
+      color: #0369a1;
       font-size: 1.2rem;
     }
     .location-header p {
@@ -146,7 +146,7 @@
       justify-content: center;
     }
     .btn-small {
-      background: #ef4444;
+      background: #0ea5e9;
       color: white;
       border: none;
       padding: 0.5rem 1rem;
@@ -156,7 +156,7 @@
       transition: all 0.3s;
     }
     .btn-small:hover:not(:disabled) {
-      background: #dc2626;
+      background: #0284c7;
       transform: translateY(-1px);
     }
     .btn-small:disabled {
@@ -165,8 +165,8 @@
       opacity: 0.6;
     }
     .route-info {
-      background: #fee2e2;
-      border: 1px solid #ef4444;
+      background: #dbeafe;
+      border: 1px solid #0ea5e9;
       border-radius: 10px;
       padding: 1rem;
       margin: 1rem 0;
@@ -178,14 +178,14 @@
       margin: 1rem 0;
     }
     .shelter-card {
-      background: #fef2f2;
-      border: 1px solid #f87171;
+      background: #f0fdf4;
+      border: 1px solid #22c55e;
       border-radius: 10px;
       padding: 1rem;
     }
     .shelter-card h4 {
       margin: 0 0 0.5rem 0;
-      color: #991b1b;
+      color: #166534;
     }
     .shelter-card p {
       margin: 0.3rem 0;
@@ -212,7 +212,7 @@
 </head>
 <body>
   <header>
-    <span>Admin - Evacuation Routes</span>
+    <span>Volunteer - Evacuation Routes</span>
     <div class="location-info">
       <span id="location-status">📍 Detecting location...</span>
     </div>
@@ -572,14 +572,14 @@
       routes.forEach(route => {
         const routeDiv = document.createElement('div');
         routeDiv.style.cssText = `
-          background: ${route.type === 'primary' ? '#fee2e2' : route.type === 'emergency' ? '#fee2e2' : '#fef2f2'};
-          border: 1px solid ${route.type === 'primary' ? '#ef4444' : route.type === 'emergency' ? '#ef4444' : '#f87171'};
+          background: ${route.type === 'primary' ? '#dbeafe' : route.type === 'emergency' ? '#fee2e2' : '#f0fdf4'};
+          border: 1px solid ${route.type === 'primary' ? '#0ea5e9' : route.type === 'emergency' ? '#ef4444' : '#22c55e'};
           border-radius: 10px;
           padding: 1rem;
           margin: 0.5rem 0;
         `;
         routeDiv.innerHTML = `
-          <h4 style="margin: 0 0 0.5rem 0; color: ${route.type === 'primary' ? '#b91c1c' : route.type === 'emergency' ? '#dc2626' : '#991b1b'}">
+          <h4 style="margin: 0 0 0.5rem 0; color: ${route.type === 'primary' ? '#0369a1' : route.type === 'emergency' ? '#dc2626' : '#166534'}">
             ${route.name}
           </h4>
           <p><strong>Description:</strong> ${route.description}</p>
